@@ -718,6 +718,13 @@ wrap.innerHTML=`
         <li>Fixed panel resize handle</li>
         <li>Fixed copy/paste not working</li>
         <li>Fixed undo history not recording correctly</li>
+        <li>Fixed Mods tab not registered in pages array — was invisible</li>
+        <li>Fixed marketplace elements having behavior:null — now correctly mapped from state (powder→POWDER, liquid→LIQUID etc.)</li>
+        <li>Fixed wire deletion — clicking SVG path now correctly identifies and removes the right connection</li>
+        <li>Fixed port highlighting — valid ports now correctly filter by direction when dragging wire</li>
+        <li>Fixed space+pan conflicting with text inputs — only activates when not focused on input fields</li>
+        <li>Fixed block collapse button firing drag on header click</li>
+        <li>Fixed AI generator leaving canvas in wrong tab after building blocks</li>
       </ul>
     </div>
 
@@ -2346,11 +2353,12 @@ function switchTab(name){
   var at=document.querySelector(".pl-tab[data-t='"+name+"']");if(at)at.classList.add("on");
   q("#pl-body").style.display=name==="editor"?"flex":"none";
   var ml=q("#pl-modloader");if(ml)ml.classList.toggle("on",name==="mods");
-  var pages=["lib","hist","keys","tut","sett","log","tmpl","share","mini","ai","market"];
+  var pages=["lib","hist","keys","tut","sett","log","tmpl","share","mini","ai","market","mods"];
   pages.forEach(function(p){var el=document.getElementById("pl-"+p+"tab");if(!el)return;if(p==="mini"){el.style.display=name==="mini"?"flex":"none";}else{el.classList.toggle("on",name===p);}});
   if(name==="lib")refreshLib();
   if(name==="tmpl")renderTemplates();
   if(name==="market")renderMarket();
+  if(name==="mods")updateModUI();
   if(name==="ai")initAI();
   if(name==="mini"&&window._miniResize)setTimeout(window._miniResize,50);
   if(name==="hist")renderHist();
@@ -2557,8 +2565,10 @@ function renderMarket(){
     });
     card.querySelector(".mkt-load").addEventListener("click",function(){
       var props=Object.assign({},el.props);
-      props.behavior=typeof behaviors!=="undefined"?(behaviors.POWDER):null;
-      if(!props.behavior)return toast("Sandboxels not loaded yet");
+      // Set correct behavior based on state
+      if(typeof behaviors==="undefined")return toast("Sandboxels not loaded yet");
+      var behMap={powder:behaviors.POWDER,liquid:behaviors.LIQUID,gas:behaviors.GAS,solid:behaviors.WALL,energy:behaviors.GAS||behaviors.POWDER};
+      props.behavior=behMap[props.state]||behaviors.POWDER;
       try{
         if(typeof addElement==="function")addElement(el.name,props);
         else elements[el.name]=props;
