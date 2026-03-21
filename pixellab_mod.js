@@ -311,6 +311,7 @@ wrap.innerHTML=`
     <div class="pl-tab" data-t="keys">⌨ Keys</div>
     <div class="pl-tab" data-t="tut">📖 Guide</div>
     <div class="pl-tab" data-t="sett">⚙ Settings</div>
+    <div class="pl-tab" data-t="log">📋 Updates</div>
   </div>
   <div id="pl-body">
     <div id="pl-pal">
@@ -482,6 +483,87 @@ wrap.innerHTML=`
       </div>
     </div>
   </div>
+  <!-- CHANGELOG TAB -->
+  <div class="pl-tabpage" id="pl-logtab">
+    <h2>📋 Update Log</h2>
+    <p style="font-size:11px;opacity:.5;margin-bottom:16px">Everything that was built, fixed, and broken along the way.</p>
+
+    <div style="border-left:2px solid var(--acc,#00e5cc);padding-left:14px;margin-bottom:20px">
+      <div style="font-size:13px;font-weight:900;color:var(--acc,#00e5cc)">v1.0 — The Big One</div>
+      <div style="font-size:10px;color:var(--dim);margin-bottom:8px">Current version</div>
+      <ul>
+        <li>First-time tutorial overlay with 5 steps</li>
+        <li>Demo element (pl_demo) auto-added on load</li>
+        <li>4 UI themes: Dark, Neon, Terminal, Light</li>
+        <li>Resizable panel — drag the left edge</li>
+        <li>Zoom in/out on the node canvas (Ctrl+scroll)</li>
+        <li>Connect blocks with bezier curves — drag ● to ●</li>
+        <li>Copy/paste blocks (Ctrl+C / Ctrl+V)</li>
+        <li>Undo/redo with full history panel (60 steps)</li>
+        <li>Element library — save and reload elements</li>
+        <li>Search &amp; replace values across all blocks</li>
+        <li>Auto-arrange blocks in a grid</li>
+        <li>Snap nodes together when dragging</li>
+        <li>Keyboard shortcuts panel</li>
+        <li>Export element as a .js file</li>
+        <li>Save/load workspace as .plab file</li>
+        <li>Autosave to localStorage</li>
+        <li>Mod loader — type any .js filename or URL to load</li>
+        <li>8 pre-made elements in Special category</li>
+        <li>Visual Code Editor (click the preview canvas)</li>
+        <li>Scratch-style block scripting in the VCE</li>
+        <li>Variables in VCE: numbers and booleans</li>
+        <li>All 13 Sandboxels categories supported</li>
+        <li>All 8 behaviors: POWDER, LIQUID, GAS, WALL, FIRE, SUPPORT, AGPOWDER, DGAS</li>
+        <li>All 8 element states: solid, powder, liquid, gas, plasma, energy, fire, special</li>
+      </ul>
+    </div>
+
+    <div style="border-left:2px solid var(--border,#22253a);padding-left:14px;margin-bottom:20px">
+      <div style="font-size:13px;font-weight:800;color:var(--text,#e2e4ee)">Block Groups</div>
+      <div style="font-size:10px;color:var(--dim);margin-bottom:8px">200+ blocks across 9 groups</div>
+      <ul>
+        <li>🏷 Identity — Name, Category, State, Tags, Description, Hidden</li>
+        <li>🎨 Appearance — 3 colors, Glow, Glow Color, Opacity, Shimmer, Pixel Size</li>
+        <li>⚙ Physics — Behavior, Density, Friction, Viscosity, Spread Rate, Gravity, Stickiness, Lifetime, Indestructible, Float, Wall, Hardness, Elasticity</li>
+        <li>🌡 Temperature — Temp, High/Low transitions, Heat Conductivity, Flammable, Melt/Boil/Freeze points, Self Heat/Cool</li>
+        <li>⚗ Reactions — Reactions (1 or 2 outputs), Explosion, Radioactive, Corrosive, Electricity, Toxic, Absorb, Contagious</li>
+        <li>🔀 Logic — If/Then, Branches (if/else), Counters, Repeat, AND, OR, Age, Random, On Fire, Above/Below</li>
+        <li>📦 Spawn — Above, Below, Left, Right, Random, Radius, Line, Clone, On Death</li>
+        <li>🖥 Code — Custom Tick, On Create, On Touch, On Destroy, Comment</li>
+        <li>🔒 Special — Generator, Timer, Void, Converter, Grow, Gravity Well, Black Hole, Nuke, Mimic, Portal, Heal, Quantum</li>
+      </ul>
+    </div>
+
+    <div style="border-left:2px solid var(--border,#22253a);padding-left:14px;margin-bottom:20px">
+      <div style="font-size:13px;font-weight:800;color:var(--text,#e2e4ee)">Bug Fixes</div>
+      <ul>
+        <li>Fixed loading screen getting stuck on startup</li>
+        <li>Fixed elements not being placeable (wrong tick signature)</li>
+        <li>Fixed element button not showing in sidebar (wrong HTML element type)</li>
+        <li>Fixed sidebar injection — now uses addElement() API correctly</li>
+        <li>Fixed category names — must be lowercase to match Sandboxels</li>
+        <li>Fixed stateHigh/stateLow property names (not tempHighElement)</li>
+        <li>Fixed animated preview freezing the game — now throttled to 8fps and stops when panel is closed</li>
+        <li>Fixed connector dots not showing — parent div was clipping overflow</li>
+        <li>Fixed changePixel() calls — replaced with pixel.element = value</li>
+        <li>Fixed mod loader to auto-fix GitHub blob URLs to raw URLs</li>
+        <li>Fixed game crash when placing elements — tick function signature corrected</li>
+        <li>Fixed panel resize handle</li>
+        <li>Fixed copy/paste not working</li>
+        <li>Fixed undo history not recording correctly</li>
+      </ul>
+    </div>
+
+    <div style="border-left:2px solid var(--border,#22253a);padding-left:14px;margin-bottom:20px">
+      <div style="font-size:13px;font-weight:800;color:var(--text,#e2e4ee)">Made by</div>
+      <div style="font-size:12px;line-height:2;margin-top:6px">
+        <strong style="color:var(--acc,#00e5cc)">Omelette</strong> — built the whole thing<br>
+        <strong style="color:var(--acc,#00e5cc)">R74n</strong> — made Sandboxels
+      </div>
+    </div>
+  </div>
+
   <div id="pl-eb"></div>
 </div>
 <div id="pl-mbg"><div id="pl-modal"><h3>📋 Exported JS</h3><textarea id="pl-mctxt" readonly></textarea><div class="pl-mbtns"><button class="pl-btn" id="pl-mcopy">Copy</button><button class="pl-btn" id="pl-mdl">Download .js</button><button class="pl-btn red" id="pl-mclose">Close</button></div></div></div>
@@ -1627,7 +1709,7 @@ function switchTab(name){
   var at=document.querySelector(".pl-tab[data-t='"+name+"']");if(at)at.classList.add("on");
   q("#pl-body").style.display=name==="editor"?"flex":"none";
   var ml=q("#pl-modloader");if(ml)ml.classList.toggle("on",name==="mods");
-  var pages=["lib","hist","keys","tut","sett"];
+  var pages=["lib","hist","keys","tut","sett","log"];
   pages.forEach(function(p){var el=document.getElementById("pl-"+p+"tab");if(el)el.classList.toggle("on",name===p);});
   if(name==="lib")refreshLib();
   if(name==="hist")renderHist();
@@ -1740,6 +1822,74 @@ try{
   else if(typeof updateElementButtons==="function") updateElementButtons();
 }catch(e){}
 console.log("[PL] "+_prebuilt.length+" pre-made elements added to Special category");
+
+// ── FIRST-TIME TUTORIAL ──────────────────────────────────────
+var _firstTime = !localStorage.getItem("pl_seen");
+if(_firstTime){
+  localStorage.setItem("pl_seen","1");
+  // Show tutorial overlay after a short delay
+  setTimeout(function(){
+    var t=T();
+    var overlay=document.createElement("div");
+    overlay.id="pl-tut-overlay";
+    overlay.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:999999;display:flex;align-items:center;justify-content:center;font-family:'Segoe UI',sans-serif;";
+    var steps=[
+      {icon:"🧪",title:"Welcome to Pixel Lab!",desc:"A visual element builder for Sandboxels. Made by Omelette."},
+      {icon:"👈",title:"Click a block to add it",desc:"Pick blocks from the left panel — like Set Color, Set Behavior, etc. They appear on the canvas."},
+      {icon:"●",title:"Connect blocks",desc:"Drag the bottom ● dot to the top ● dot of another block to connect them visually."},
+      {icon:'➕',title:'Add to Sandboxels',desc:'Click the Add to Sandboxels button to inject your element live into the game. Find it in the sidebar!'},
+      {icon:"🎁",title:"Try the demo element!",desc:"We added a demo element called pl_demo to the Special category. Click it in the sidebar and place it down!"},
+    ];
+    var cur=0;
+    function render(){
+      var s=steps[cur];
+      overlay.innerHTML='<div style="background:'+t.surf+';border:1px solid '+t.border+';border-radius:14px;padding:36px 40px;max-width:400px;text-align:center;">'+
+        '<div style="font-size:52px;margin-bottom:12px">'+s.icon+'</div>'+
+        '<div style="font-size:20px;font-weight:900;color:'+t.acc+';margin-bottom:10px">'+s.title+'</div>'+
+        '<div style="font-size:13px;color:'+t.text+';opacity:.8;line-height:1.7;margin-bottom:24px">'+s.desc+'</div>'+
+        '<div style="display:flex;gap:10px;justify-content:center;align-items:center;">'+
+          (cur>0?'<button id="pl-tut-back" style="background:'+t.panel+';border:1px solid '+t.border+';color:'+t.text+';font-size:12px;font-weight:700;padding:9px 20px;border-radius:6px;cursor:pointer;">← Back</button>':'')+
+          '<button id="pl-tut-next" style="background:'+t.acc+';border:none;color:#000;font-size:13px;font-weight:800;padding:10px 28px;border-radius:6px;cursor:pointer;">'+(cur===steps.length-1?"Let's go! 🚀":"Next →")+'</button>'+
+        '</div>'+
+        '<div style="margin-top:14px;font-size:10px;color:'+t.dim+'">'+(cur+1)+' / '+steps.length+'</div>'+
+      '</div>';
+      document.body.appendChild(overlay);
+      var nb=document.getElementById("pl-tut-next");
+      if(nb)nb.addEventListener("click",function(){
+        cur++;
+        if(cur>=steps.length){overlay.remove();}
+        else render();
+      });
+      var bb=document.getElementById("pl-tut-back");
+      if(bb)bb.addEventListener("click",function(){cur--;render();});
+    }
+    render();
+  }, 1200);
+}
+
+// ── DEMO ELEMENT ─────────────────────────────────────────────
+// Always inject a fun demo element so there's something to test
+setTimeout(function(){
+  try{
+    var demoProps={
+      color:"#00ffcc",color2:"#0088aa",color3:"#ff00ff",
+      behavior:typeof behaviors!=="undefined"?behaviors.POWDER:null,
+      category:"special",state:"powder",density:1100,
+      glow:0.5,glowColor:"#00ffcc",
+      desc:"Pixel Lab demo element — place me!",
+      tick:function(pixel){
+        // slowly changes colour based on temperature
+        if((pixel.temp||25)>60){pixel.element="steam";}
+        if(Math.random()<0.02){pixel.temp=(pixel.temp||25)+1;}
+      }
+    };
+    if(!demoProps.behavior)return;
+    if(typeof addElement==="function") addElement("pl_demo",demoProps);
+    else if(typeof elements!=="undefined") elements["pl_demo"]=demoProps;
+    try{if(typeof rebuildMenu==="function")rebuildMenu();}catch{}
+    console.log("[PL] Demo element added — find 'pl_demo' in Special category");
+  }catch(e){console.log("[PL] Demo element failed:",e);}
+}, 500);
 
 toast("Pixel Lab v"+VER+" — Click 🧪 bottom-right!",3000);
 console.log("[PixelLab] v"+VER+" by "+AUTHOR+" — ready!");
