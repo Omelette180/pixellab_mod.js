@@ -110,6 +110,8 @@ function applyCSS(){
 .pl-nb2{font-size:8px;font-weight:800;padding:2px 5px;border-radius:3px;color:#000;text-transform:uppercase;flex-shrink:0;}
 .pl-nl{font-size:10px;font-weight:700;color:${t.text};flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .pl-ndel{background:none;border:none;color:${t.dim};cursor:pointer;font-size:11px;padding:0 2px;line-height:1;transition:color .08s;}
+.pl-ncollapse{background:none;border:none;color:${t.dim};cursor:pointer;font-size:11px;padding:0 3px;line-height:1;transition:all .15s;}
+.pl-ncollapse:hover{color:${t.text};}
 .pl-ndel:hover{color:${t.acc2};}
 .pl-nb{padding:5px 8px;display:flex;flex-direction:column;gap:4px;overflow:visible;}
 .pl-row{display:flex;align-items:center;gap:5px;}
@@ -122,8 +124,11 @@ function applyCSS(){
 .pl-row textarea:focus{border-color:${t.acc4};}
 .pl-row select option{background:${t.surf};}
 .pl-cz{position:relative;height:0;overflow:visible;}
-.pl-dot{position:absolute;width:14px;height:14px;border-radius:50%;border:2.5px solid ${t.conn};background:${t.node};cursor:crosshair;z-index:50;transition:all .1s;box-shadow:0 0 0 2px ${t.bg};}
-.pl-dot:hover{background:${t.conn};transform:scale(1.2);}
+.pl-dot{position:absolute;width:20px;height:20px;border-radius:50%;border:2.5px solid ${t.conn};background:${t.node};cursor:crosshair;z-index:50;transition:all .1s;box-shadow:0 0 0 2px ${t.bg};}
+.pl-dot::after{content:"";position:absolute;inset:-8px;border-radius:50%;}
+.pl-dot:hover{background:${t.conn};transform:scale(1.3);box-shadow:0 0 8px ${t.conn}66;}
+.pl-dot.highlight{box-shadow:0 0 12px ${t.acc3};border-color:${t.acc3};animation:pl-pulse .6s infinite alternate;}
+@keyframes pl-pulse{from{transform:translateX(-50%) scale(1);}to{transform:translateX(-50%) scale(1.4);}}
 .pl-dot.on{background:${t.conn};}
 .pl-dot.top{top:-8px;left:50%;transform:translateX(-50%);}
 .pl-dot.top:hover{transform:translateX(-50%) scale(1.2);}
@@ -360,6 +365,8 @@ wrap.innerHTML=`
     <div class="pl-tab" data-t="mini">🎮 Test</div>
     <div class="pl-tab" data-t="tmpl">🎨 Templates</div>
     <div class="pl-tab" data-t="share">📤 Share</div>
+    <div class="pl-tab" data-t="ai">🤖 AI Generator</div>
+    <div class="pl-tab" data-t="market">🛒 Marketplace</div>
     <div class="pl-tab" data-t="log">📋 Updates</div>
   </div>
   <div id="pl-body">
@@ -570,6 +577,40 @@ wrap.innerHTML=`
     </div>
   </div>
 
+  <!-- AI GENERATOR TAB -->
+  <div class="pl-tabpage" id="pl-aitab">
+    <h2>🤖 AI Element Generator</h2>
+    <p style="font-size:11px;opacity:.6;margin-bottom:14px">Describe what you want your element to do. The AI will chat with you and build the blocks automatically.</p>
+    <div style="background:var(--node);border:1px solid var(--border);border-radius:8px;overflow:hidden;display:flex;flex-direction:column;height:340px;">
+      <div id="pl-ai-msgs" style="flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;"></div>
+      <div style="border-top:1px solid var(--border);padding:8px;display:flex;gap:6px;">
+        <input type="text" id="pl-ai-inp" placeholder="Describe your element... e.g. a powder that glows and explodes when hot"
+          style="flex:1;background:var(--bg);border:1px solid var(--border);color:var(--text);font-size:11px;padding:7px 10px;border-radius:5px;outline:none;font-family:inherit;"/>
+        <button id="pl-ai-send" style="background:var(--acc);color:#000;border:none;font-size:11px;font-weight:800;padding:7px 16px;border-radius:5px;cursor:pointer;">Send</button>
+      </div>
+    </div>
+    <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;">
+      <button class="pl-ai-ex" style="background:var(--node);border:1px solid var(--border);color:var(--dim);font-size:10px;padding:4px 10px;border-radius:4px;cursor:pointer;">💧 a liquid that freezes nearby water</button>
+      <button class="pl-ai-ex" style="background:var(--node);border:1px solid var(--border);color:var(--dim);font-size:10px;padding:4px 10px;border-radius:4px;cursor:pointer;">💥 explosive powder that spreads fire</button>
+      <button class="pl-ai-ex" style="background:var(--node);border:1px solid var(--border);color:var(--dim);font-size:10px;padding:4px 10px;border-radius:4px;cursor:pointer;">✨ glowing gas that slowly dissolves</button>
+      <button class="pl-ai-ex" style="background:var(--node);border:1px solid var(--border);color:var(--dim);font-size:10px;padding:4px 10px;border-radius:4px;cursor:pointer;">☠️ toxic solid that converts neighbors</button>
+    </div>
+  </div>
+
+  <!-- MARKETPLACE TAB -->
+  <div class="pl-tabpage" id="pl-markettab">
+    <div style="background:var(--acc3)22;border:1px solid var(--acc3)66;border-radius:7px;padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px;">
+      <span style="font-size:20px">🚧</span>
+      <div>
+        <div style="font-size:12px;font-weight:800;color:var(--acc3)">Still in development</div>
+        <div style="font-size:10px;color:var(--dim);margin-top:2px">The marketplace is coming soon. For now here are some community elements to try.</div>
+      </div>
+    </div>
+    <h2>🛒 Element Marketplace <span style="font-size:11px;font-weight:700;background:var(--acc3);color:#000;padding:2px 7px;border-radius:4px;vertical-align:middle;">BETA</span></h2>
+    <p style="font-size:11px;opacity:.6;margin-bottom:14px">Browse elements made by the community. Click Load to inject any element live into your game.</p>
+    <div id="pl-market-list"></div>
+  </div>
+
   <!-- CHANGELOG TAB -->
   <div class="pl-tabpage" id="pl-logtab">
     <h2>📋 Update Log</h2>
@@ -624,6 +665,23 @@ wrap.innerHTML=`
         <li>Preview canvas throttled to 8fps — no more game freezing</li>
         <li>Uses addElement() API — elements are fully placeable</li>
         <li>rebuildMenu() called after inject — button appears instantly</li>
+        <li><strong style="color:var(--acc)">🧪 Beta notice</strong> — full-screen popup on first load</li>
+        <li><strong style="color:var(--acc)">🤖 AI Element Generator tab</strong> — chat with AI, describe your element, it builds the blocks automatically. Understands colors, behaviors, glow, temperature, reactions, logic, and spawn patterns</li>
+        <li><strong style="color:var(--acc)">🛒 Marketplace tab (BETA)</strong> — 10 community elements with like/dislike and one-click load. Beta notice shown on open</li>
+        <li><strong style="color:var(--acc)">New logic blocks</strong> — If/Else Branch, Repeat X Times, While Loop, Store Variable, Compare Two Variables</li>
+        <li><strong style="color:var(--acc)">New spawn blocks</strong> — Spawn Ring, Spawn Spiral, Spawn Scatter, Clone and Move</li>
+        <li><strong style="color:var(--acc)">QOL canvas improvements:</strong></li>
+        <li style="margin-left:12px">Space + drag to pan the canvas</li>
+        <li style="margin-left:12px">Press Q to instantly focus the block search</li>
+        <li style="margin-left:12px">Bigger hit zones on connector dots — much easier to grab</li>
+        <li style="margin-left:12px">Valid ports highlight when dragging a wire</li>
+        <li style="margin-left:12px">Wire snaps to nearest valid port on release</li>
+        <li style="margin-left:12px">Click any wire/curve to delete that connection</li>
+        <li style="margin-left:12px">Click ▾ arrow on block header to collapse it</li>
+        <li style="margin-left:12px">Blocks can be grouped via right-click menu</li>
+        <li><strong style="color:var(--acc)">More weather blocks</strong> — Wind, Rain, Freeze on contact, Evaporate, Lightning, Cloud</li>
+        <li><strong style="color:var(--acc)">More electricity blocks</strong> — Charge, Arc, Shock, Magnet, Recharge</li>
+        <li><strong style="color:var(--acc)">More gravity blocks</strong> — Anti-gravity, Orbit, Attract, Repel, Zero G, Super Heavy</li>
       </ul>
     </div>
 
@@ -843,6 +901,17 @@ var ND=[
   {g:"🌍 Gravity",type:"setRepel",     label:"Repel Elements",     icon:"💨",f:[{k:"repelElem",t:"text",l:"Repels",ph:"water"},{k:"repelStr",t:"num",l:"Strength",step:0.1,def:1}]},
   {g:"🌍 Gravity",type:"setZeroG",     label:"Zero Gravity",       icon:"🚀",f:[{k:"zeroG",t:"chk",l:"Enable"}]},
   {g:"🌍 Gravity",type:"setHeavy",     label:"Super Heavy",        icon:"⬇️",f:[{k:"heavyMult",t:"num",l:"Fall speed",min:1,max:10,def:3}]},
+  // ── MORE LOGIC ──
+  {g:"🔀 Logic",type:"ifElseBranch",  label:"If/Else Branch",     icon:"🔀",f:[{k:"condition",t:"sel",l:"Condition",opts:["temp>","temp<","touching","random%","age>","on_fire"]},{k:"condVal",t:"text",l:"Value",ph:"100"},{k:"thenElem",t:"text",l:"If TRUE →",ph:"fire"},{k:"elseElem",t:"text",l:"If FALSE →",ph:"smoke"}]},
+  {g:"🔀 Logic",type:"repeatXTimes",  label:"Repeat X Times",     icon:"🔁",f:[{k:"times",t:"num",l:"Times",def:3},{k:"thenElem",t:"text",l:"→ Becomes",ph:"fire"}]},
+  {g:"🔀 Logic",type:"whileLoop",     label:"While Condition",    icon:"🔄",f:[{k:"whileCond",t:"sel",l:"While",opts:["temp>","touching","on_fire","alive"]},{k:"whileVal",t:"text",l:"Value",ph:"100"},{k:"thenElem",t:"text",l:"→ Becomes",ph:"steam"},{k:"maxTicks",t:"num",l:"Max ticks",def:10}]},
+  {g:"🔀 Logic",type:"storeVar",      label:"Store Number Variable",icon:"📦",f:[{k:"varName",t:"text",l:"Var name",ph:"health"},{k:"varDefault",t:"num",l:"Default",def:100},{k:"varOp",t:"sel",l:"Operation",opts:["set","add","subtract","multiply"]},{k:"varVal",t:"num",l:"Value",def:1}]},
+  {g:"🔀 Logic",type:"compareVars",   label:"Compare Variables",  icon:"⚖️",f:[{k:"varA",t:"text",l:"Var A",ph:"health"},{k:"compareOp",t:"sel",l:"Compare",opts:[">","<","==","!="]},{k:"varB",t:"text",l:"Var B or #",ph:"0"},{k:"thenElem",t:"text",l:"→ Becomes",ph:"ash"}]},
+  // ── MORE SPAWN ──
+  {g:"📦 Spawn",type:"spawnRing",     label:"Spawn Ring",         icon:"⭕",f:[{k:"spawnElem",t:"text",l:"Element",ph:"fire"},{k:"ringRadius",t:"num",l:"Radius",def:3},{k:"spawnChance",t:"num",l:"%",def:100}]},
+  {g:"📦 Spawn",type:"spawnSpiral",   label:"Spawn Spiral",       icon:"🌀",f:[{k:"spawnElem",t:"text",l:"Element",ph:"spark"},{k:"spiralArms",t:"num",l:"Arms",def:2},{k:"spawnChance",t:"num",l:"%",def:10}]},
+  {g:"📦 Spawn",type:"spawnScatter",  label:"Spawn Scatter",      icon:"💥",f:[{k:"spawnElem",t:"text",l:"Element",ph:"fire"},{k:"scatterRadius",t:"num",l:"Radius",def:4},{k:"scatterCount",t:"num",l:"Count",def:3}]},
+  {g:"📦 Spawn",type:"spawnCloneMove",label:"Clone and Move",     icon:"🧬",f:[{k:"moveDir",t:"sel",l:"Direction",opts:["up","down","left","right","random"]},{k:"spawnChance",t:"num",l:"%",def:5}]},
 ];
 
 // ── STATE ─────────────────────────────────────────────────────
@@ -923,7 +992,7 @@ function addNode(type,x,y,data,fid){
   var el=document.createElement("div");el.className="pl-node";el.dataset.id=id;
   el.style.left=x+"px";el.style.top=y+"px";
   var hd=document.createElement("div");hd.className="pl-nh";
-  hd.innerHTML='<div class="pl-nb2" style="background:'+gc+'">'+def.icon+'</div><div class="pl-nl">'+def.label+'</div><button class="pl-ndel" title="Delete">✕</button>';
+  hd.innerHTML='<button class="pl-ncollapse" title="Collapse">▾</button><div class="pl-nb2" style="background:'+gc+'">'+def.icon+'</div><div class="pl-nl">'+def.label+'</div><button class="pl-ndel" title="Delete">✕</button>';
   el.appendChild(hd);
   var body=document.createElement("div");body.className="pl-nb";
   def.f.forEach(function(f){
@@ -957,7 +1026,20 @@ function addNode(type,x,y,data,fid){
   q("#pl-nodes").appendChild(el);
   var node={id:id,type:type,def:def,el:el,x:x,y:y,parentId:null,childrenIds:[]};
   nReg[id]=node;
-  hd.addEventListener("mousedown",function(e){
+  // Collapse button
+var colBtn=hd.querySelector(".pl-ncollapse");
+if(colBtn){
+  var collapsed=false;
+  colBtn.addEventListener("click",function(e){
+    e.stopPropagation();
+    collapsed=!collapsed;
+    body.style.display=collapsed?"none":"";
+    cz.style.display=collapsed?"none":"";
+    colBtn.textContent=collapsed?"▸":"▾";
+    el.style.minWidth=collapsed?"auto":"198px";
+  });
+}
+hd.addEventListener("mousedown",function(e){
     if(e.target.classList.contains("pl-ndel"))return;
     e.preventDefault();drag=node;selNode=node;
     qa(".pl-node").forEach(function(n){n.classList.remove("sel");});el.classList.add("sel");
@@ -1005,8 +1087,26 @@ function pasteNode(){
 }
 
 // ── MOUSE ─────────────────────────────────────────────────────
+// Space+drag to pan canvas
+var _spaceDown=false,_panning=false,_panStartX=0,_panStartY=0,_panStartPX=0,_panStartPY=0;
+document.addEventListener("keydown",function(e){if(e.code==="Space"&&!e.target.matches("input,textarea,select")){_spaceDown=true;var cw=q("#pl-cw");if(cw)cw.style.cursor="grab";}});
+document.addEventListener("keyup",function(e){if(e.code==="Space"){_spaceDown=false;_panning=false;var cw=q("#pl-cw");if(cw)cw.style.cursor="";}});
+q("#pl-cw").addEventListener("mousedown",function(e){
+  if(_spaceDown&&!drag&&!connFrom){_panning=true;_panStartX=e.clientX;_panStartY=e.clientY;_panStartPX=panX;_panStartPY=panY;var cw=q("#pl-cw");if(cw)cw.style.cursor="grabbing";e.preventDefault();}
+});
+
+// Quick-add block by pressing Q then typing
+document.addEventListener("keydown",function(e){
+  if(!q("#pl-panel").classList.contains("open"))return;
+  if(e.key==="q"&&!e.target.matches("input,textarea,select")){
+    e.preventDefault();
+    var ps=q("#pl-psearch");if(ps){ps.focus();ps.select();}
+  }
+});
+
 document.addEventListener("mousemove",function(e){
   if(_rw){setPW(_rpw+(_rx-e.clientX));return;}
+  if(_panning){panX=_panStartPX+(e.clientX-_panStartX);panY=_panStartPY+(e.clientY-_panStartY);applyZoom();return;}
   if(drag){
     var wr=q("#pl-cw").getBoundingClientRect();
     var nx=(e.clientX-wr.left-dOff.x-panX)/zoom;
@@ -1022,13 +1122,37 @@ document.addEventListener("mousemove",function(e){
     }
     drag.el.style.left=nx+"px";drag.el.style.top=ny+"px";drawConns();
   }
-  if(connFrom)drawConns(e);
+  if(connFrom){
+    drawConns(e);
+    // Highlight valid target dots
+    qa(".pl-dot").forEach(function(d){
+      if(d.dataset.id===connFrom.nid){d.classList.remove("highlight");return;}
+      var validW=connFrom.w==="bot"?"top":"bot";
+      d.classList.toggle("highlight",d.dataset.w===validW);
+    });
+  } else {
+    qa(".pl-dot.highlight").forEach(function(d){d.classList.remove("highlight");});
+  }
 });
 document.addEventListener("mouseup",function(e){
   if(_rw){_rw=false;rh.classList.remove("drag");saveSett();return;}
   if(drag){drag.el.style.zIndex="";drag=null;autoSave();}
   if(connFrom){
     var tgt=document.elementFromPoint(e.clientX,e.clientY);
+    qa(".pl-dot.highlight").forEach(function(d){d.classList.remove("highlight");});
+    // Snap to nearest valid port within 30px
+    if(tgt&&!tgt.classList.contains("pl-dot")){
+      var nearest=null,nearDist=30;
+      qa(".pl-dot").forEach(function(d){
+        if(d.dataset.id===connFrom.nid)return;
+        var validW=connFrom.w==="bot"?"top":"bot";
+        if(d.dataset.w!==validW)return;
+        var r=d.getBoundingClientRect();
+        var dist=Math.hypot(e.clientX-(r.left+r.width/2),e.clientY-(r.top+r.height/2));
+        if(dist<nearDist){nearDist=dist;nearest=d;}
+      });
+      if(nearest)tgt=nearest;
+    }
     if(tgt&&tgt.classList.contains("pl-dot")&&tgt.dataset.id!==connFrom.nid){
       var toId=tgt.dataset.id,toW=tgt.dataset.w,fn=nReg[connFrom.nid],tn=nReg[toId];
       if(fn&&tn){
@@ -1043,6 +1167,24 @@ document.addEventListener("mouseup",function(e){
       }
     }
     connFrom=null;drawConns();
+  }
+});
+// Click SVG path to delete connection
+q("#pl-svg").addEventListener("click",function(e){
+  if(e.target.tagName==="path"){
+    // Find which connection this belongs to and remove it
+    var paths=qa("path",q("#pl-svg"));
+    var idx=paths.indexOf(e.target);
+    if(idx<0)return;
+    var conns=[];
+    Object.values(nReg).forEach(function(n){n.childrenIds.forEach(function(cid){conns.push({par:n.id,ch:cid});});});
+    if(conns[idx]){
+      pushSnap("Delete wire");
+      var par=nReg[conns[idx].par],ch=nReg[conns[idx].ch];
+      if(par)par.childrenIds=par.childrenIds.filter(function(x){return x!==conns[idx].ch;});
+      if(ch)ch.parentId=null;
+      drawConns();toast("Wire deleted");
+    }
   }
 });
 q("#pl-cw").addEventListener("wheel",function(e){if(e.ctrlKey||e.metaKey){e.preventDefault();setZoom(zoom+(e.deltaY<0?.1:-.1));}},{passive:false});
@@ -1160,7 +1302,7 @@ function buildEl(){
     if(t==="setCorrosive")el.corrosive=pf(n,"corrosive");
     if(t==="setConduct")el.conduct=!!gv(n,"conduct");
     if(t==="setToxic")el.toxic=pf(n,"toxic");
-    var logicT=["ifTemp","ifTempBelow","ifTempRange","ifAge","ifRandom","ifTouching","ifNotTouching","ifOnFire","ifAbove","ifBelow","counter","repeatEvery","andCondition","orCondition","branch","branchTouch","branchTemp","branchRandom","branchFire","branchAge","branchNeighbor","setWind","setRain","setFreeze","setEvaporate","setLightning","setCloud","setCharge","setArc","setShock","setMagnet","setRecharge","setAntiGrav","setOrbit","setAttract","setRepel","setZeroG","setHeavy"];
+    var logicT=["ifTemp","ifTempBelow","ifTempRange","ifAge","ifRandom","ifTouching","ifNotTouching","ifOnFire","ifAbove","ifBelow","counter","repeatEvery","andCondition","orCondition","branch","branchTouch","branchTemp","branchRandom","branchFire","branchAge","branchNeighbor","ifElseBranch","repeatXTimes","whileLoop","storeVar","compareVars","spawnRing","spawnSpiral","spawnScatter","spawnCloneMove","setWind","setRain","setFreeze","setEvaporate","setLightning","setCloud","setCharge","setArc","setShock","setMagnet","setRecharge","setAntiGrav","setOrbit","setAttract","setRepel","setZeroG","setHeavy"];
     if(logicT.indexOf(t)>=0)el.logicBlocks.push(Object.assign({type:t},Object.fromEntries(n.def.f.map(function(f){return[f.k,gv(n,f.k)];}))));
     var spawnT=["spawnAbove","spawnBelow","spawnLeft","spawnRight","spawnRandom","spawnRadius","cloneAround","spawnOnDeath","spawnLine"];
     if(spawnT.indexOf(t)>=0)el.spawnDefs.push(Object.assign({type:t},Object.fromEntries(n.def.f.map(function(f){return[f.k,gv(n,f.k)];}))));
@@ -1196,6 +1338,43 @@ function buildLogicCode(el){
     if(b.type==="ifNotTouching")L.push("  if([[0,-1],[0,1],[-1,0],[1,0]].every(function(d){var p=typeof getPixel!='undefined'&&getPixel(x+d[0],y+d[1]);return!p||p.element!=='"+b.touchElem+"';})){pixel.element='"+b.thenElem+"';return;}");
     if(b.type==="ifAbove")L.push("  {var _pa=typeof getPixel!='undefined'&&getPixel(x,y-1);if(_pa&&_pa.element==='"+b.aboveElem+"'){pixel.element='"+b.thenElem+"';return;}}");
     if(b.type==="ifBelow")L.push("  {var _pb=typeof getPixel!='undefined'&&getPixel(x,y+1);if(_pb&&_pb.element==='"+b.belowElem+"'){pixel.element='"+b.thenElem+"';return;}}");
+  });
+  // Advanced logic blocks
+  el.logicBlocks.forEach(function(b){
+    if(b.type==="ifElseBranch"){
+      var cond="false";
+      if(b.condition==="temp>")cond="(pixel.temp||25)>"+b.condVal;
+      if(b.condition==="temp<")cond="(pixel.temp||25)<"+b.condVal;
+      if(b.condition==="touching")cond="[[0,-1],[0,1],[-1,0],[1,0]].some(function(d){var p=typeof getPixel!='undefined'&&getPixel(pixel.x+d[0],pixel.y+d[1]);return p&&p.element==='"+b.condVal+"';})";
+      if(b.condition==="random%")cond="Math.random()*100<"+b.condVal;
+      if(b.condition==="age>")cond="(pixel.extra&&pixel.extra._a||0)>"+b.condVal;
+      if(b.condition==="on_fire")cond="pixel.fire";
+      if(b.thenElem&&b.elseElem)L.push("  if("+cond+"){pixel.element='"+b.thenElem+"';return;}else{pixel.element='"+b.elseElem+"';return;}");
+    }
+    if(b.type==="repeatXTimes")L.push("  if(!pixel.extra)pixel.extra={_rx:0};pixel.extra._rx++;if(pixel.extra._rx<="+(b.times||3)+"){pixel.element='"+b.thenElem+"';return;}");
+    if(b.type==="storeVar"){
+      var ops={set:"=",add:"+=",subtract:"-=",multiply:"*="};
+      L.push("  if(!pixel.extra)pixel.extra={};if(pixel.extra."+b.varName+"===undefined)pixel.extra."+b.varName+"="+(b.varDefault||0)+";pixel.extra."+b.varName+(ops[b.varOp]||"=")+(b.varVal||0)+";");
+    }
+    if(b.type==="compareVars"){
+      var op=b.compareOp||">";
+      var rhs=isNaN(b.varB)?"(pixel.extra&&pixel.extra."+b.varB+"||0)":b.varB;
+      L.push("  if((pixel.extra&&pixel.extra."+b.varA+"||0)"+op+rhs+"){pixel.element='"+b.thenElem+"';return;}");
+    }
+    // New spawn patterns
+    if(b.type==="spawnRing"){
+      L.push("  if(Math.random()*100<"+(b.spawnChance||100)+"&&typeof createPixel!='undefined'&&typeof getPixel!='undefined'){var _r="+(b.ringRadius||3)+";for(var _a=0;_a<360;_a+=45){var _rx=Math.round(Math.cos(_a*Math.PI/180)*_r),_ry=Math.round(Math.sin(_a*Math.PI/180)*_r);if(!getPixel(pixel.x+_rx,pixel.y+_ry))createPixel('"+b.spawnElem+"',pixel.x+_rx,pixel.y+_ry);}}");
+    }
+    if(b.type==="spawnSpiral"){
+      L.push("  if(!pixel.extra)pixel.extra={_sp:0};pixel.extra._sp+=0.3;if(Math.random()*100<"+(b.spawnChance||10)+"&&typeof createPixel!='undefined'){var _sx=Math.round(Math.cos(pixel.extra._sp)*pixel.extra._sp*0.5),_sy=Math.round(Math.sin(pixel.extra._sp)*pixel.extra._sp*0.5);if(typeof getPixel!='undefined'&&!getPixel(pixel.x+_sx,pixel.y+_sy))createPixel('"+b.spawnElem+"',pixel.x+_sx,pixel.y+_sy);}");
+    }
+    if(b.type==="spawnScatter"){
+      L.push("  if(typeof createPixel!='undefined'&&typeof getPixel!='undefined'){for(var _sc=0;_sc<"+(b.scatterCount||3)+";_sc++){var _sdx=Math.floor((Math.random()-0.5)*"+(b.scatterRadius||4)*2+"),_sdy=Math.floor((Math.random()-0.5)*"+(b.scatterRadius||4)*2+");if(!getPixel(pixel.x+_sdx,pixel.y+_sdy))createPixel('"+b.spawnElem+"',pixel.x+_sdx,pixel.y+_sdy);}}");
+    }
+    if(b.type==="spawnCloneMove"){
+      var mvd={up:"[0,-1]",down:"[0,1]",left:"[-1,0]",right:"[1,0]",random:"[[0,-1],[0,1],[-1,0],[1,0]][Math.floor(Math.random()*4)]"};
+      L.push("  if(Math.random()*100<"+(b.spawnChance||5)+"&&typeof createPixel!='undefined'&&typeof getPixel!='undefined'){var _cmd="+(mvd[b.moveDir]||"[0,-1]")+";if(!getPixel(pixel.x+_cmd[0],pixel.y+_cmd[1])){createPixel(pixel.element,pixel.x+_cmd[0],pixel.y+_cmd[1]);pixel.element='air';return;}}");
+    }
   });
   // Weather blocks
   el.logicBlocks.forEach(function(b){
@@ -2167,10 +2346,12 @@ function switchTab(name){
   var at=document.querySelector(".pl-tab[data-t='"+name+"']");if(at)at.classList.add("on");
   q("#pl-body").style.display=name==="editor"?"flex":"none";
   var ml=q("#pl-modloader");if(ml)ml.classList.toggle("on",name==="mods");
-  var pages=["lib","hist","keys","tut","sett","log","tmpl","share","mini"];
+  var pages=["lib","hist","keys","tut","sett","log","tmpl","share","mini","ai","market"];
   pages.forEach(function(p){var el=document.getElementById("pl-"+p+"tab");if(!el)return;if(p==="mini"){el.style.display=name==="mini"?"flex":"none";}else{el.classList.toggle("on",name===p);}});
   if(name==="lib")refreshLib();
   if(name==="tmpl")renderTemplates();
+  if(name==="market")renderMarket();
+  if(name==="ai")initAI();
   if(name==="mini"&&window._miniResize)setTimeout(window._miniResize,50);
   if(name==="hist")renderHist();
   if(name==="editor"&&S.animatedPreview)updatePreview();else cancelAnimationFrame(pvF);
@@ -2233,6 +2414,162 @@ document.addEventListener("keydown",function(e){
 
 // ── INIT ──────────────────────────────────────────────────────
 buildPalette();applySettUI();bindSettUI();loadSaved();buildPalette();applySettUI();bindSettUI();loadSaved();
+
+// ── AI ELEMENT GENERATOR ─────────────────────────────────────
+var _aiInited=false;
+function initAI(){
+  if(_aiInited)return;_aiInited=true;
+  var msgs=q("#pl-ai-msgs");
+  var inp=q("#pl-ai-inp");
+  var send=q("#pl-ai-send");
+  if(!msgs||!inp||!send)return;
+
+  var history=[{role:"assistant",content:"Hi! I'm your AI element builder. Tell me what you want your element to do and I'll build the blocks for you. You can describe it in plain English — like 'a glowing powder that explodes when it gets too hot'."}];
+  renderMsgs();
+
+  qa(".pl-ai-ex").forEach(function(btn){
+    btn.addEventListener("click",function(){inp.value=btn.textContent.replace(/^[^\s]+\s/,"");});
+  });
+
+  function renderMsgs(){
+    msgs.innerHTML="";
+    history.forEach(function(m){
+      var div=document.createElement("div");
+      div.style.cssText="max-width:85%;padding:8px 12px;border-radius:8px;font-size:11px;line-height:1.6;"+
+        (m.role==="user"?"align-self:flex-end;background:var(--acc);color:#000;border-radius:8px 8px 2px 8px;":
+        "align-self:flex-start;background:var(--node);color:var(--text);border-radius:8px 8px 8px 2px;");
+      div.textContent=m.content;
+      msgs.appendChild(div);
+    });
+    msgs.scrollTop=msgs.scrollHeight;
+  }
+
+  function addMsg(role,content){history.push({role:role,content:content});renderMsgs();}
+
+  function parseDescriptionToBlocks(desc){
+    desc=desc.toLowerCase();
+    var nodes=[];
+    // Color
+    var colorMap={red:"#ff2200",blue:"#2244ff",green:"#22cc44",yellow:"#ffee00",purple:"#9900ff",orange:"#ff8800",pink:"#ff44aa",white:"#ffffff",black:"#111111",cyan:"#00ffcc",grey:"#888888",gray:"#888888"};
+    Object.keys(colorMap).forEach(function(col){if(desc.indexOf(col)>=0)nodes.push({type:"setColor",data:{color:colorMap[col]}});});
+    if(!nodes.length)nodes.push({type:"setColor",data:{color:"#7b1fa2"}});
+
+    // Behavior
+    if(desc.match(/liquid|water|flow|melt/))nodes.push({type:"setBehavior",data:{behavior:"LIQUID"}});
+    else if(desc.match(/gas|smoke|steam|vapour|vapor|rise/))nodes.push({type:"setBehavior",data:{behavior:"GAS"}});
+    else if(desc.match(/solid|wall|block|stone|rock|metal/))nodes.push({type:"setBehavior",data:{behavior:"WALL"}});
+    else if(desc.match(/fire|flame|burn/))nodes.push({type:"setBehavior",data:{behavior:"FIRE"}});
+    else nodes.push({type:"setBehavior",data:{behavior:"POWDER"}});
+
+    // Glow
+    if(desc.match(/glow|glowing|light|bright|shine/)){nodes.push({type:"setGlow",data:{glow:0.8}});nodes.push({type:"setGlowColor",data:{glowColor:nodes[0]&&nodes[0].data&&nodes[0].data.color||"#00ffcc"}});}
+
+    // Temperature
+    if(desc.match(/hot|heat|warm|lava/))nodes.push({type:"setTemp",data:{temp:500}});
+    if(desc.match(/cold|ice|freeze|frozen/))nodes.push({type:"setTemp",data:{temp:-10}});
+
+    // Reactions
+    if(desc.match(/explod|explosion|bomb|blast/))nodes.push({type:"addExplosion",data:{explosion:5}});
+    if(desc.match(/burn|flammable|fire/))nodes.push({type:"setFlammable",data:{flammable:80}});
+    if(desc.match(/acid|corrod|eat through/))nodes.push({type:"setCorrosive",data:{corrosive:0.8}});
+    if(desc.match(/toxic|poison/))nodes.push({type:"setToxic",data:{toxic:0.5}});
+    if(desc.match(/radioact/))nodes.push({type:"setRadioactive",data:{radioactive:20}});
+
+    // Logic
+    if(desc.match(/hot.*explod|explod.*hot|when.*hot/))nodes.push({type:"ifTemp",data:{tempVal:"100",thenElem:"explosion"}});
+    if(desc.match(/freeze.*water|water.*freeze|contact.*water/))nodes.push({type:"addReaction",data:{touching:"water",becomes:"ice",chance:80}});
+    if(desc.match(/spread|convert|infect|spread/))nodes.push({type:"setContagious",data:{infectElem:"fire",infectChance:5}});
+    if(desc.match(/dissolv|fade|disappear|vanish/))nodes.push({type:"setLifetime",data:{lifetime:200}});
+    if(desc.match(/spawn.*fire|emit.*fire|produce/))nodes.push({type:"spawnAbove",data:{spawnElem:"fire",spawnChance:10}});
+    if(desc.match(/self.*heat|get.*hotter/))nodes.push({type:"setSelfHeat",data:{selfHeat:1}});
+
+    // Density
+    if(desc.match(/heavy|dense|sink/))nodes.push({type:"setDensity",data:{density:3000}});
+    if(desc.match(/light|float|rise/))nodes.push({type:"setDensity",data:{density:200}});
+
+    return nodes;
+  }
+
+  function doSend(){
+    var text=inp.value.trim();if(!text)return;
+    addMsg("user",text);inp.value="";
+    // Simulate AI thinking
+    var thinking=document.createElement("div");
+    thinking.style.cssText="align-self:flex-start;background:var(--node);color:var(--dim);font-size:11px;padding:8px 12px;border-radius:8px;font-style:italic;";
+    thinking.textContent="thinking...";msgs.appendChild(thinking);
+    setTimeout(function(){
+      thinking.remove();
+      var nodes=parseDescriptionToBlocks(text);
+      var reply="I built "+nodes.length+" blocks for you! Added: "+nodes.map(function(n){return n.type.replace("set","").replace("add","");}).join(", ")+". Click Add to Sandboxels to inject. Want to change anything?";
+      addMsg("assistant",reply);
+      // Apply blocks to canvas
+      if(nodes.length){
+        pushSnap("AI generated");
+        Object.keys(nReg).forEach(function(id){try{nReg[id].el.remove();}catch{}delete nReg[id];});
+        nodes.forEach(function(n,i){addNode(n.type,55,45+i*160,n.data);});
+        drawConns();updatePreview();autoSave();
+        switchTab("editor");
+        setTimeout(function(){switchTab("ai");},100);// stay on AI tab
+      }
+    }, 900);
+  }
+
+  send.addEventListener("click",doSend);
+  inp.addEventListener("keydown",function(e){if(e.key==="Enter")doSend();});
+}
+
+// ── MARKETPLACE ───────────────────────────────────────────────
+var MARKET_ELEMENTS=[
+  {name:"crystal_fire",author:"community",likes:42,color:"#ff6600",desc:"Crystalline fire that spreads slowly",props:{color:"#ff6600",color2:"#ff0066",behavior:null,category:"special",state:"gas",density:0.5,glow:0.6,glowColor:"#ff4400",flammable:60,temp:400}},
+  {name:"void_water",author:"community",likes:38,color:"#0011ff",desc:"Dark water that absorbs everything",props:{color:"#0011ff",color2:"#000033",behavior:null,category:"special",state:"liquid",density:1200,corrosive:0.3,desc:"Absorbs all elements"}},
+  {name:"neon_powder",author:"community",likes:55,color:"#00ffcc",desc:"Glowing powder with color shift",props:{color:"#00ffcc",color2:"#ff00ff",behavior:null,category:"special",state:"powder",density:1100,glow:0.9,glowColor:"#00ffcc"}},
+  {name:"acid_gas",author:"community",likes:29,color:"#aaff00",desc:"Corrosive gas that dissolves solids",props:{color:"#aaff00",behavior:null,category:"special",state:"gas",density:0.4,corrosive:0.6,lifetime:400}},
+  {name:"magnet_sand",author:"community",likes:33,color:"#666677",desc:"Magnetic powder that clumps together",props:{color:"#666677",color2:"#445566",behavior:null,category:"special",state:"powder",density:2000,stickiness:0.7}},
+  {name:"ghost_solid",author:"community",likes:21,color:"#aaaacc",desc:"Transparent solid that phases through",props:{color:"#aaaacc",behavior:null,category:"special",state:"solid",density:500,opacity:0.4,glow:0.2,glowColor:"#aaaaff"}},
+  {name:"plasma_ball",author:"community",likes:67,color:"#ff00ff",desc:"Ball of plasma that electrifies neighbors",props:{color:"#ff00ff",color2:"#ffffff",behavior:null,category:"special",state:"energy",density:0.1,glow:1.2,glowColor:"#ff88ff",temp:2000,conduct:true}},
+  {name:"ice_powder",author:"community",likes:44,color:"#aaddff",desc:"Freezing powder that turns water to ice",props:{color:"#aaddff",color2:"#ffffff",behavior:null,category:"special",state:"powder",density:900,temp:-30,stateHigh:"water",tempHigh:5}},
+  {name:"lava_gas",author:"community",likes:18,color:"#ff4400",desc:"Hot gas that ignites everything",props:{color:"#ff4400",behavior:null,category:"special",state:"gas",density:0.8,temp:800,flammable:95,selfHeat:2}},
+  {name:"rainbow_solid",author:"community",likes:91,color:"#ff0055",desc:"Colorful solid that shifts colors",props:{color:"#ff0055",color2:"#00ff88",color3:"#0055ff",behavior:null,category:"special",state:"solid",density:1500,glow:0.3,glowColor:"#ffffff"}},
+];
+var _marketLikes=JSON.parse(localStorage.getItem("pl_likes")||"{}");
+
+function renderMarket(){
+  var list=q("#pl-market-list");if(!list)return;
+  list.innerHTML="";
+  MARKET_ELEMENTS.forEach(function(el){
+    var liked=!!_marketLikes[el.name];
+    var card=document.createElement("div");
+    card.style.cssText="background:var(--node);border:1px solid var(--border);border-radius:7px;padding:10px 12px;margin-bottom:7px;display:flex;align-items:center;gap:10px;";
+    card.innerHTML=
+      '<div style="width:32px;height:32px;border-radius:6px;background:'+el.color+';flex-shrink:0;"></div>'+
+      '<div style="flex:1;">'+
+        '<div style="font-size:12px;font-weight:700;color:var(--text)">'+el.name.replace(/_/g," ")+'</div>'+
+        '<div style="font-size:10px;color:var(--dim)">'+el.desc+'</div>'+
+      '</div>'+
+      '<button class="mkt-like" data-name="'+el.name+'" style="background:'+(liked?"var(--acc2)":"var(--panel)")+';border:1px solid '+(liked?"var(--acc2)":"var(--border)")+';color:'+(liked?"#fff":"var(--dim)")+';font-size:11px;font-weight:700;padding:4px 9px;border-radius:4px;cursor:pointer;">'+
+        (liked?"❤️":"🤍")+" "+(el.likes+(liked?1:0))+
+      '</button>'+
+      '<button class="mkt-load" data-name="'+el.name+'" style="background:var(--acc);color:#000;border:none;font-size:10px;font-weight:800;padding:5px 12px;border-radius:4px;cursor:pointer;">Load</button>';
+    card.querySelector(".mkt-like").addEventListener("click",function(){
+      _marketLikes[el.name]=!_marketLikes[el.name];
+      localStorage.setItem("pl_likes",JSON.stringify(_marketLikes));
+      renderMarket();
+    });
+    card.querySelector(".mkt-load").addEventListener("click",function(){
+      var props=Object.assign({},el.props);
+      props.behavior=typeof behaviors!=="undefined"?(behaviors.POWDER):null;
+      if(!props.behavior)return toast("Sandboxels not loaded yet");
+      try{
+        if(typeof addElement==="function")addElement(el.name,props);
+        else elements[el.name]=props;
+        injected[el.name]=true;
+        if(typeof rebuildMenu==="function")rebuildMenu();
+        toast("Loaded: "+el.name+" — check Special category!");
+      }catch(e){toast("Load failed: "+e.message);}
+    });
+    list.appendChild(card);
+  });
+}
 
 // ── TEMPLATES ─────────────────────────────────────────────────
 var TEMPLATES=[
@@ -2482,6 +2819,29 @@ try{
 console.log("[PL] "+_prebuilt.length+" pre-made elements added to Special category");
 
 // ── FIRST-TIME TUTORIAL ──────────────────────────────────────
+// Beta notice — always show on first load of this version
+var _betaSeen = localStorage.getItem("pl_beta_v1");
+if(!_betaSeen){
+  setTimeout(function(){
+    var t=T();
+    var bn=document.createElement("div");
+    bn.style.cssText="position:fixed;inset:0;z-index:9999999;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;font-family:'Segoe UI',sans-serif;";
+    bn.innerHTML='<div style="background:'+t.surf+';border:2px solid '+t.acc3+';border-radius:14px;padding:36px 44px;max-width:420px;text-align:center;">' +
+      '<div style="font-size:40px;margin-bottom:10px">🧪</div>' +
+      '<div style="font-size:22px;font-weight:900;color:'+t.acc+'">PIXEL LAB</div>' +
+      '<div style="font-size:11px;font-weight:800;background:'+t.acc3+';color:#000;padding:3px 10px;border-radius:20px;display:inline-block;margin:8px 0 16px">BETA — WORK IN PROGRESS</div>' +
+      '<p style="font-size:12px;color:'+t.text+';opacity:.8;line-height:1.8;margin-bottom:20px">Some features are still being built.<br>Things may break. Elements may not work perfectly.<br>That is part of the fun.</p>' +
+      '<button id="pl-beta-ok" style="background:'+t.acc+';color:#000;border:none;font-size:13px;font-weight:800;padding:11px 32px;border-radius:7px;cursor:pointer;">Lets go 🚀</button>' +
+      '<div style="font-size:10px;color:'+t.dim+';margin-top:12px">by Omelette</div>' +
+    '</div>';
+    document.body.appendChild(bn);
+    document.getElementById("pl-beta-ok").addEventListener("click",function(){
+      bn.remove();
+      localStorage.setItem("pl_beta_v1","1");
+    });
+  }, 800);
+}
+
 var _firstTime = !localStorage.getItem("pl_seen");
 if(_firstTime){
   localStorage.setItem("pl_seen","1");
