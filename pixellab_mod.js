@@ -105,7 +105,7 @@ function applyCSS(){
 .pl-node{position:absolute;min-width:198px;background:${t.node};border:1.5px solid ${t.border};border-radius:7px;box-shadow:0 4px 16px rgba(0,0,0,.4);user-select:none;transition:border-color .08s;overflow:visible;}
 .pl-node:hover{border-color:${t.dim};}
 .pl-node.sel{border-color:${t.acc}!important;box-shadow:0 0 0 2px ${t.acc}1a,0 4px 16px rgba(0,0,0,.4);}
-.pl-nh{padding:6px 8px;background:${t.nodehd};border-radius:6px 6px 0 0;display:flex;align-items:center;gap:5px;cursor:grab;border-bottom:1px solid ${t.border};}
+.pl-nh{padding:6px 8px;background:${t.nodehd};border-radius:6px 6px 0 0;display:flex;align-items:center;gap:5px;cursor:grab;border-bottom:1px solid ${t.border};overflow:visible;position:relative;}
 .pl-nh:active{cursor:grabbing;}
 .pl-nb2{font-size:8px;font-weight:800;padding:2px 5px;border-radius:3px;color:#000;text-transform:uppercase;flex-shrink:0;}
 .pl-nl{font-size:10px;font-weight:700;color:${t.text};flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -267,6 +267,52 @@ function applyCSS(){
 #pl-modal h3{font-size:13px;font-weight:900;color:${t.acc};margin-bottom:8px;}
 #pl-mctxt{width:100%;height:170px;background:${t.bg};border:1px solid ${t.border};color:${t.acc4};font-family:monospace;font-size:9px;padding:7px;border-radius:4px;resize:none;outline:none;}
 .pl-mbtns{display:flex;gap:6px;margin-top:9px;justify-content:flex-end;}
+/* LIVE ELEMENT EDITOR POPUP */
+#pl-live-editor{display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.85);align-items:center;justify-content:center;}
+#pl-live-editor.on{display:flex;}
+#pl-led-box{background:${t.surf};border:1px solid ${t.border};border-radius:12px;width:640px;max-width:96vw;max-height:92vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.8);}
+#pl-led-top{padding:12px 16px;background:${t.nodehd};border-bottom:1px solid ${t.border};display:flex;align-items:center;gap:10px;flex-shrink:0;}
+#pl-led-title{font-size:14px;font-weight:900;color:${t.acc};flex:1;}
+#pl-led-close{background:none;border:none;color:${t.dim};font-size:18px;cursor:pointer;padding:2px 7px;border-radius:4px;}
+#pl-led-close:hover{color:${t.acc2};}
+#pl-led-body{display:flex;flex:1;overflow:hidden;}
+/* left: injected element list */
+#pl-led-list{width:150px;background:${t.panel};border-right:1px solid ${t.border};overflow-y:auto;flex-shrink:0;padding:6px;}
+.pl-led-lhd{font-size:9px;font-weight:800;color:${t.dim};text-transform:uppercase;letter-spacing:.8px;padding:4px 4px 6px;}
+.pl-led-item{padding:5px 7px;border-radius:4px;cursor:pointer;font-size:10px;font-weight:600;color:${t.text};margin-bottom:2px;border:1px solid transparent;display:flex;align-items:center;gap:6px;transition:all .08s;}
+.pl-led-item:hover{background:${t.node};border-color:${t.border};}
+.pl-led-item.sel{background:${t.acc}22;border-color:${t.acc};color:${t.acc};}
+.pl-led-swatch{width:12px;height:12px;border-radius:3px;flex-shrink:0;}
+/* center: pixel canvas */
+#pl-led-canvas-wrap{width:180px;background:${t.bg};border-right:1px solid ${t.border};display:flex;flex-direction:column;align-items:center;padding:10px;gap:8px;flex-shrink:0;}
+#pl-led-pvc{border-radius:6px;image-rendering:pixelated;border:1px solid ${t.border};cursor:crosshair;}
+.pl-led-clabel{font-size:9px;color:${t.dim};text-align:center;font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+#pl-led-colorpick{width:50px;height:28px;border:none;padding:0;cursor:pointer;border-radius:4px;}
+#pl-led-brushsize{width:90px;accent-color:${t.acc};}
+/* right: property editor */
+#pl-led-props{flex:1;overflow-y:auto;padding:10px 14px;}
+.pl-led-section{font-size:9px;font-weight:800;color:${t.dim};text-transform:uppercase;letter-spacing:.8px;padding:8px 0 4px;border-bottom:1px solid ${t.border};margin-bottom:8px;}
+.pl-led-row{display:flex;align-items:center;gap:8px;margin-bottom:7px;}
+.pl-led-row label{font-size:10px;color:${t.dim};font-weight:600;min-width:70px;}
+.pl-led-row input[type=range]{flex:1;accent-color:${t.acc};cursor:pointer;}
+.pl-led-row input[type=color]{width:36px;height:24px;border:none;padding:0;cursor:pointer;border-radius:3px;}
+.pl-led-row input[type=number],.pl-led-row input[type=text],.pl-led-row select{flex:1;background:${t.bg};border:1px solid ${t.border};color:${t.text};font-size:10px;padding:3px 6px;border-radius:3px;outline:none;font-family:monospace;}
+.pl-led-row input:focus,.pl-led-row select:focus{border-color:${t.acc};}
+.pl-led-val{font-size:10px;color:${t.acc};font-family:monospace;min-width:32px;text-align:right;}
+.pl-led-rxn{background:${t.node};border:1px solid ${t.border};border-radius:5px;padding:6px 8px;margin-bottom:5px;display:flex;align-items:center;gap:6px;font-size:10px;}
+.pl-led-rxn input{background:${t.bg};border:1px solid ${t.border};color:${t.text};font-size:10px;padding:2px 5px;border-radius:3px;outline:none;width:65px;font-family:monospace;}
+.pl-led-rxn input:focus{border-color:${t.acc};}
+.pl-led-rxndel{background:none;border:none;color:${t.dim};cursor:pointer;font-size:12px;}
+.pl-led-rxndel:hover{color:${t.acc2};}
+#pl-led-bottom{padding:10px 14px;background:${t.nodehd};border-top:1px solid ${t.border};display:flex;gap:8px;align-items:center;flex-shrink:0;}
+#pl-led-apply{background:${t.acc};color:#000;border:none;font-size:11px;font-weight:800;padding:8px 20px;border-radius:5px;cursor:pointer;}
+#pl-led-apply:hover{filter:brightness(1.1);}
+#pl-led-copy{background:${t.panel};border:1px solid ${t.border};color:${t.text};font-size:11px;font-weight:700;padding:8px 14px;border-radius:5px;cursor:pointer;}
+#pl-led-copy:hover{border-color:${t.acc};color:${t.acc};}
+#pl-led-undo{background:${t.panel};border:1px solid ${t.border};color:${t.text};font-size:11px;font-weight:700;padding:8px 10px;border-radius:5px;cursor:pointer;}
+#pl-led-undo:hover{border-color:${t.acc3};color:${t.acc3};}
+#pl-led-autoapply{display:flex;align-items:center;gap:5px;font-size:10px;color:${t.dim};margin-left:auto;}
+
 #pl-toast{display:none;position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:${t.acc};color:#000;font-size:11px;font-weight:800;padding:7px 15px;border-radius:5px;z-index:999999;pointer-events:none;font-family:inherit;}
 #pl-toast.on{display:block;}
 .pl-sidetag{font-size:8px;background:${t.acc}22;color:${t.acc};border:1px solid ${t.acc}44;border-radius:2px;padding:1px 3px;margin-left:2px;font-weight:700;}
@@ -311,6 +357,9 @@ wrap.innerHTML=`
     <div class="pl-tab" data-t="keys">⌨ Keys</div>
     <div class="pl-tab" data-t="tut">📖 Guide</div>
     <div class="pl-tab" data-t="sett">⚙ Settings</div>
+    <div class="pl-tab" data-t="mini">🎮 Test</div>
+    <div class="pl-tab" data-t="tmpl">🎨 Templates</div>
+    <div class="pl-tab" data-t="share">📤 Share</div>
     <div class="pl-tab" data-t="log">📋 Updates</div>
   </div>
   <div id="pl-body">
@@ -483,6 +532,44 @@ wrap.innerHTML=`
       </div>
     </div>
   </div>
+  <!-- MINI TEST CANVAS TAB -->
+  <div class="pl-tabpage" id="pl-minitab" style="padding:0;display:none;flex-direction:column;">
+    <div style="padding:8px 12px;background:var(--surf,#13151c);border-bottom:1px solid var(--border,#22253a);display:flex;align-items:center;gap:8px;flex-shrink:0;">
+      <button id="pl-mini-inj" style="background:var(--acc,#00e5cc);color:#000;border:none;font-size:10px;font-weight:800;padding:6px 12px;border-radius:4px;cursor:pointer;">▶ Inject &amp; Test</button>
+      <button id="pl-mini-clr" style="background:var(--panel,#0f1016);border:1px solid var(--border,#22253a);color:var(--text,#e2e4ee);font-size:10px;font-weight:700;padding:6px 10px;border-radius:4px;cursor:pointer;">🗑 Clear</button>
+      <select id="pl-mini-tool" style="background:var(--panel,#0f1016);border:1px solid var(--border,#22253a);color:var(--text,#e2e4ee);font-size:10px;padding:5px 7px;border-radius:4px;outline:none;">
+        <option value="draw">✏️ Draw</option>
+        <option value="erase">🗑 Erase</option>
+        <option value="sand">Sand</option>
+        <option value="water">Water</option>
+        <option value="fire">Fire</option>
+      </select>
+      <span id="pl-mini-status" style="font-size:10px;color:var(--dim,#454d60);font-family:monospace;">Inject first, then draw</span>
+    </div>
+    <canvas id="pl-mini-canvas" style="flex:1;cursor:crosshair;display:block;background:#111;image-rendering:pixelated;"></canvas>
+  </div>
+
+  <!-- TEMPLATES TAB -->
+  <div class="pl-tabpage" id="pl-tmpltab">
+    <h2>🎨 Element Templates</h2>
+    <p style="font-size:11px;opacity:.6;margin-bottom:14px">Pick a preset to start from. Loads blocks onto the canvas instantly.</p>
+    <div id="pl-tmpl-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"></div>
+  </div>
+
+  <!-- SHARE TAB -->
+  <div class="pl-tabpage" id="pl-sharetab">
+    <h2>📤 Share Element</h2>
+    <p style="font-size:11px;opacity:.6;margin-bottom:12px">Copy this code and send it to anyone. They can paste it in the console to get your element instantly.</p>
+    <button id="pl-share-gen" style="background:var(--acc,#00e5cc);color:#000;border:none;font-size:11px;font-weight:800;padding:8px 16px;border-radius:5px;cursor:pointer;margin-bottom:10px;width:100%">⚡ Generate Share Code</button>
+    <textarea id="pl-share-out" readonly style="width:100%;height:180px;background:var(--bg,#0d0e13);border:1px solid var(--border,#22253a);color:var(--acc4,#9d7bea);font-family:monospace;font-size:9px;padding:8px;border-radius:5px;resize:none;outline:none;" placeholder="Click Generate to create a shareable code snippet…"></textarea>
+    <button id="pl-share-copy" style="background:var(--panel,#0f1016);border:1px solid var(--border,#22253a);color:var(--text,#e2e4ee);font-size:11px;font-weight:700;padding:7px;border-radius:5px;cursor:pointer;width:100%;margin-top:6px">📋 Copy to Clipboard</button>
+    <div style="margin-top:14px;padding:10px;background:var(--node,#161820);border-radius:6px;border:1px solid var(--border,#22253a);">
+      <div style="font-size:10px;font-weight:800;color:var(--acc3,#ffd166);margin-bottom:6px">📥 Import someone else's element</div>
+      <textarea id="pl-share-inp" style="width:100%;height:70px;background:var(--bg,#0d0e13);border:1px solid var(--border,#22253a);color:var(--text,#e2e4ee);font-family:monospace;font-size:9px;padding:6px;border-radius:4px;resize:none;outline:none;" placeholder="Paste share code here…"></textarea>
+      <button id="pl-share-imp" style="background:var(--acc3,#ffd166);color:#000;border:none;font-size:11px;font-weight:800;padding:6px 14px;border-radius:4px;cursor:pointer;margin-top:5px;width:100%">📥 Import Element</button>
+    </div>
+  </div>
+
   <!-- CHANGELOG TAB -->
   <div class="pl-tabpage" id="pl-logtab">
     <h2>📋 Update Log</h2>
@@ -509,13 +596,34 @@ wrap.innerHTML=`
         <li>Save/load workspace as .plab file</li>
         <li>Autosave to localStorage</li>
         <li>Mod loader — type any .js filename or URL to load</li>
+        <li>Auto-fixes GitHub blob URLs to raw URLs</li>
+        <li>Remembers last 8 loaded mods</li>
         <li>8 pre-made elements in Special category</li>
-        <li>Visual Code Editor (click the preview canvas)</li>
+        <li>Visual Code Editor — click the preview canvas</li>
         <li>Scratch-style block scripting in the VCE</li>
         <li>Variables in VCE: numbers and booleans</li>
         <li>All 13 Sandboxels categories supported</li>
         <li>All 8 behaviors: POWDER, LIQUID, GAS, WALL, FIRE, SUPPORT, AGPOWDER, DGAS</li>
         <li>All 8 element states: solid, powder, liquid, gas, plasma, energy, fire, special</li>
+        <li><strong style="color:var(--acc)">🌤 Weather blocks</strong> — Wind, Rain, Freeze on contact, Evaporate, Lightning, Cloud</li>
+        <li><strong style="color:var(--acc)">⚡ Electricity blocks</strong> — Charge, Spark Arc, Electric Shock, Magnetic Pull, Self Recharging</li>
+        <li><strong style="color:var(--acc)">🌍 Gravity blocks</strong> — Anti-gravity, Orbit, Attract, Repel, Zero G, Super Heavy</li>
+        <li><strong style="color:var(--acc)">🎨 Templates tab</strong> — 10 presets: Fire, Liquid, Solid, Gas, Glow, Explosive, Acid, Ice, Radioactive, Heavy Liquid</li>
+        <li><strong style="color:var(--acc)">📤 Share tab</strong> — generate a code snippet to send your element to anyone, import others' elements</li>
+        <li><strong style="color:var(--acc)">🎮 Test tab</strong> — mini canvas to draw and test your element's appearance</li>
+        <li><strong style="color:var(--acc)">🎨 Live Element Editor</strong> — click the preview canvas to open a full popup editor:</li>
+        <li style="margin-left:12px">Paint pixels directly onto a 120×120 canvas with a color picker and brush</li>
+        <li style="margin-left:12px">Edit all properties live: colors, behavior, state, density, gravity, friction, viscosity, spread rate, stickiness, opacity, glow, temperature, reactions, radioactivity, corrosive, explosion</li>
+        <li style="margin-left:12px">List of all injected elements — click any to edit it</li>
+        <li style="margin-left:12px">Undo button — 20 step history just for the live editor</li>
+        <li style="margin-left:12px">Copy as New — duplicate any element with a new name</li>
+        <li style="margin-left:12px">Re-inject to Game — push all changes live instantly</li>
+        <li style="margin-left:12px">Auto-apply mode — changes apply every keystroke</li>
+        <li style="margin-left:12px">Right-click any sidebar element button to open its editor</li>
+        <li>Connector dots fixed — now always visible on blocks</li>
+        <li>Preview canvas throttled to 8fps — no more game freezing</li>
+        <li>Uses addElement() API — elements are fully placeable</li>
+        <li>rebuildMenu() called after inject — button appears instantly</li>
       </ul>
     </div>
 
@@ -604,7 +712,7 @@ document.body.appendChild(wrap);
 })();
 
 // ── BLOCK GROUP COLORS ────────────────────────────────────────
-var GC={"🏷 Identity":"#7b61ff","🎨 Appearance":"#ff5e5b","⚙ Physics":"#00c896","🌡 Temperature":"#ffe566","⚗ Reactions":"#f97316","🔀 Logic":"#e879f9","📦 Spawn":"#34d399","🖥 Code":"#a78bfa","🔒 Special":"#94a3b8"};
+var GC={"🏷 Identity":"#7b61ff","🎨 Appearance":"#ff5e5b","⚙ Physics":"#00c896","🌡 Temperature":"#ffe566","⚗ Reactions":"#f97316","🔀 Logic":"#e879f9","📦 Spawn":"#34d399","🖥 Code":"#a78bfa","🔒 Special":"#94a3b8","🌤 Weather":"#60a5fa","⚡ Electricity":"#fbbf24","🌍 Gravity":"#34d399"};
 
 // ── ALL BLOCK DEFINITIONS ─────────────────────────────────────
 // CATEGORIES match real Sandboxels categories
@@ -715,6 +823,26 @@ var ND=[
   {g:"🔒 Special",type:"setPortal",  label:"Portal",               icon:"🌀",f:[{k:"portalId",t:"text",l:"Portal ID",ph:"portal_a"},{k:"portalOut",t:"text",l:"Exit ID",ph:"portal_b"}]},
   {g:"🔒 Special",type:"setHeal",    label:"Heals Elements",       icon:"💚",f:[{k:"healElem",t:"text",l:"Heals",ph:"wood"},{k:"healAmt",t:"num",l:"Amount",def:1}]},
   {g:"🔒 Special",type:"setQuantum", label:"Quantum State",        icon:"🎲",f:[{k:"stateA",t:"text",l:"State A",ph:"solid"},{k:"stateB",t:"text",l:"State B",ph:"gas"},{k:"qChance",t:"num",l:"%",def:50}]},
+  // ── WEATHER ──
+  {g:"🌤 Weather",type:"setWind",      label:"Wind Effect",      icon:"🌬️",f:[{k:"windDir",t:"sel",l:"Direction",opts:["left","right","up","random"]},{k:"windStr",t:"num",l:"Strength",min:0,max:5,step:0.5,def:1}]},
+  {g:"🌤 Weather",type:"setRain",      label:"Rains Down",       icon:"🌧️",f:[{k:"rainElem",t:"text",l:"Rains",ph:"water"},{k:"rainChance",t:"num",l:"%",def:3}]},
+  {g:"🌤 Weather",type:"setFreeze",    label:"Freeze on Contact",icon:"❄️",f:[{k:"freezeElem",t:"text",l:"Freezes",ph:"water"},{k:"freezeResult",t:"text",l:"→ Into",ph:"ice"}]},
+  {g:"🌤 Weather",type:"setEvaporate", label:"Evaporate in Heat",icon:"☀️",f:[{k:"evapTemp",t:"num",l:"At °C",def:80},{k:"evapResult",t:"text",l:"→ Into",ph:"steam"}]},
+  {g:"🌤 Weather",type:"setLightning", label:"Lightning Strike",  icon:"⚡",f:[{k:"lightChance",t:"num",l:"Chance %",def:1},{k:"lightResult",t:"text",l:"→ Becomes",ph:"plasma"}]},
+  {g:"🌤 Weather",type:"setCloud",     label:"Cloud (spawns rain)",icon:"☁️",f:[{k:"cloudElem",t:"text",l:"Drops",ph:"water"},{k:"cloudChance",t:"num",l:"%",def:2}]},
+  // ── ELECTRICITY ──
+  {g:"⚡ Electricity",type:"setCharge",    label:"Electric Charge",    icon:"🔋",f:[{k:"charge",t:"num",l:"Charge",min:-5,max:5,step:0.5,def:1}]},
+  {g:"⚡ Electricity",type:"setArc",       label:"Spark Arc",          icon:"⚡",f:[{k:"arcElem",t:"text",l:"Arcs to",ph:"metal"},{k:"arcChance",t:"num",l:"%",def:10}]},
+  {g:"⚡ Electricity",type:"setShock",     label:"Electric Shock",     icon:"🌩️",f:[{k:"shockDmg",t:"num",l:"Damage",min:0,max:1,step:0.1,def:0.5},{k:"shockElem",t:"text",l:"→ Becomes",ph:"ash"}]},
+  {g:"⚡ Electricity",type:"setMagnet",    label:"Magnetic Pull",      icon:"🧲",f:[{k:"magnetElem",t:"text",l:"Attracts",ph:"metal"},{k:"magnetStr",t:"num",l:"Strength",step:0.1,def:1}]},
+  {g:"⚡ Electricity",type:"setRecharge",  label:"Self Recharging",    icon:"🔌",f:[{k:"rechargeRate",t:"num",l:"Rate/tick",step:0.1,def:0.1}]},
+  // ── GRAVITY ──
+  {g:"🌍 Gravity",type:"setAntiGrav",  label:"Anti-Gravity",       icon:"🎈",f:[{k:"antiStr",t:"num",l:"Lift",step:0.1,def:1}]},
+  {g:"🌍 Gravity",type:"setOrbit",     label:"Orbit Around",       icon:"🪐",f:[{k:"orbitElem",t:"text",l:"Orbits",ph:"sun"},{k:"orbitSpeed",t:"num",l:"Speed",step:0.1,def:1}]},
+  {g:"🌍 Gravity",type:"setAttract",   label:"Attract Elements",   icon:"🌑",f:[{k:"attractElem",t:"text",l:"Attracts",ph:"sand"},{k:"attractStr",t:"num",l:"Strength",step:0.1,def:1}]},
+  {g:"🌍 Gravity",type:"setRepel",     label:"Repel Elements",     icon:"💨",f:[{k:"repelElem",t:"text",l:"Repels",ph:"water"},{k:"repelStr",t:"num",l:"Strength",step:0.1,def:1}]},
+  {g:"🌍 Gravity",type:"setZeroG",     label:"Zero Gravity",       icon:"🚀",f:[{k:"zeroG",t:"chk",l:"Enable"}]},
+  {g:"🌍 Gravity",type:"setHeavy",     label:"Super Heavy",        icon:"⬇️",f:[{k:"heavyMult",t:"num",l:"Fall speed",min:1,max:10,def:3}]},
 ];
 
 // ── STATE ─────────────────────────────────────────────────────
@@ -816,8 +944,15 @@ function addNode(type,x,y,data,fid){
     body.appendChild(row);
   });
   el.appendChild(body);
+  // Connector dots — placed directly on el with high z-index so they always show
+  var dotTop=document.createElement("div");
+  dotTop.className="pl-dot top";dotTop.dataset.id=id;dotTop.dataset.w="top";dotTop.title="Drag to connect";
+  el.appendChild(dotTop);
+  var dotBot=document.createElement("div");
+  dotBot.className="pl-dot bot";dotBot.dataset.id=id;dotBot.dataset.w="bot";dotBot.title="Drag to connect";
+  el.appendChild(dotBot);
+  // Keep pl-cz for backward compat but empty
   var cz=document.createElement("div");cz.className="pl-cz";
-  cz.innerHTML='<div class="pl-dot top" data-id="'+id+'" data-w="top"></div><div class="pl-dot bot" data-id="'+id+'" data-w="bot"></div>';
   el.appendChild(cz);
   q("#pl-nodes").appendChild(el);
   var node={id:id,type:type,def:def,el:el,x:x,y:y,parentId:null,childrenIds:[]};
@@ -1025,7 +1160,7 @@ function buildEl(){
     if(t==="setCorrosive")el.corrosive=pf(n,"corrosive");
     if(t==="setConduct")el.conduct=!!gv(n,"conduct");
     if(t==="setToxic")el.toxic=pf(n,"toxic");
-    var logicT=["ifTemp","ifTempBelow","ifTempRange","ifAge","ifRandom","ifTouching","ifNotTouching","ifOnFire","ifAbove","ifBelow","counter","repeatEvery","andCondition","orCondition","branch","branchTouch","branchTemp","branchRandom","branchFire","branchAge","branchNeighbor"];
+    var logicT=["ifTemp","ifTempBelow","ifTempRange","ifAge","ifRandom","ifTouching","ifNotTouching","ifOnFire","ifAbove","ifBelow","counter","repeatEvery","andCondition","orCondition","branch","branchTouch","branchTemp","branchRandom","branchFire","branchAge","branchNeighbor","setWind","setRain","setFreeze","setEvaporate","setLightning","setCloud","setCharge","setArc","setShock","setMagnet","setRecharge","setAntiGrav","setOrbit","setAttract","setRepel","setZeroG","setHeavy"];
     if(logicT.indexOf(t)>=0)el.logicBlocks.push(Object.assign({type:t},Object.fromEntries(n.def.f.map(function(f){return[f.k,gv(n,f.k)];}))));
     var spawnT=["spawnAbove","spawnBelow","spawnLeft","spawnRight","spawnRandom","spawnRadius","cloneAround","spawnOnDeath","spawnLine"];
     if(spawnT.indexOf(t)>=0)el.spawnDefs.push(Object.assign({type:t},Object.fromEntries(n.def.f.map(function(f){return[f.k,gv(n,f.k)];}))));
@@ -1061,6 +1196,24 @@ function buildLogicCode(el){
     if(b.type==="ifNotTouching")L.push("  if([[0,-1],[0,1],[-1,0],[1,0]].every(function(d){var p=typeof getPixel!='undefined'&&getPixel(x+d[0],y+d[1]);return!p||p.element!=='"+b.touchElem+"';})){pixel.element='"+b.thenElem+"';return;}");
     if(b.type==="ifAbove")L.push("  {var _pa=typeof getPixel!='undefined'&&getPixel(x,y-1);if(_pa&&_pa.element==='"+b.aboveElem+"'){pixel.element='"+b.thenElem+"';return;}}");
     if(b.type==="ifBelow")L.push("  {var _pb=typeof getPixel!='undefined'&&getPixel(x,y+1);if(_pb&&_pb.element==='"+b.belowElem+"'){pixel.element='"+b.thenElem+"';return;}}");
+  });
+  // Weather blocks
+  el.logicBlocks.forEach(function(b){
+    if(b.type==="setWind"){
+      var dirs={"left":"pixel.x--;","right":"pixel.x++;","up":"pixel.y--;","random":"if(Math.random()<.5)pixel.x+=(Math.random()<.5?1:-1);"};
+      L.push("  if(Math.random()<"+(b.windStr||1)*0.1+"){"+(dirs[b.windDir]||"pixel.x++;")+"}");}
+    if(b.type==="setRain")L.push("  if(Math.random()*100<"+(b.rainChance||3)+"&&typeof createPixel!=='undefined'&&typeof getPixel!=='undefined'&&!getPixel(pixel.x,pixel.y-1))createPixel('"+b.rainElem+"',pixel.x,pixel.y-1);");
+    if(b.type==="setFreeze")L.push("  [[0,-1],[0,1],[-1,0],[1,0]].forEach(function(d){var n=typeof getPixel!=='undefined'&&getPixel(pixel.x+d[0],pixel.y+d[1]);if(n&&n.element==='"+b.freezeElem+"')n.element='"+b.freezeResult+"';});");
+    if(b.type==="setEvaporate")L.push("  if((pixel.temp||25)>"+b.evapTemp+"){pixel.element='"+b.evapResult+"';return;}");
+    if(b.type==="setLightning")L.push("  if(Math.random()*100<"+(b.lightChance||1)+"){pixel.element='"+b.lightResult+"';return;}");
+    if(b.type==="setCloud")L.push("  if(Math.random()*100<"+(b.cloudChance||2)+"&&typeof createPixel!=='undefined'&&typeof getPixel!=='undefined'&&!getPixel(pixel.x,pixel.y+1))createPixel('"+b.cloudElem+"',pixel.x,pixel.y+1);");
+    if(b.type==="setArc")L.push("  if(Math.random()*100<"+(b.arcChance||10)+"&&typeof getPixel!=='undefined'){var _n=[[0,-1],[0,1],[-1,0],[1,0]].map(function(d){return getPixel(pixel.x+d[0],pixel.y+d[1]);}).find(function(p){return p&&p.element==='"+b.arcElem+"';});if(_n){_n.element='plasma';}}");
+    if(b.type==="setShock")L.push("  [[0,-1],[0,1],[-1,0],[1,0]].forEach(function(d){var n=typeof getPixel!=='undefined'&&getPixel(pixel.x+d[0],pixel.y+d[1]);if(n&&n.element!=='wall'){n.element='"+b.shockElem+"';}});");
+    if(b.type==="setAntiGrav")L.push("  if(Math.random()<"+(b.antiStr||1)*0.1+")pixel.y--;");
+    if(b.type==="setAttract")L.push("  {var _adir=[[0,-1],[0,1],[-1,0],[1,0]].find(function(d){var n=typeof getPixel!=='undefined'&&getPixel(pixel.x+d[0],pixel.y+d[1]);return n&&n.element==='"+b.attractElem+"';});if(_adir){pixel.x+=_adir[0];pixel.y+=_adir[1];}}");
+    if(b.type==="setRepel")L.push("  {var _rdir=[[0,-1],[0,1],[-1,0],[1,0]].find(function(d){var n=typeof getPixel!=='undefined'&&getPixel(pixel.x+d[0],pixel.y+d[1]);return n&&n.element==='"+b.repelElem+"';});if(_rdir){pixel.x-=_rdir[0];pixel.y-=_rdir[1];}}");
+    if(b.type==="setZeroG")L.push("  // zero gravity — handled by behavior");
+    if(b.type==="setHeavy")L.push("  for(var _h=0;_h<"+(b.heavyMult||3)-1+";_h++){if(typeof getPixel!=='undefined'&&!getPixel(pixel.x,pixel.y+1))pixel.y++;}");
   });
   // Branch blocks
   el.logicBlocks.forEach(function(b){
@@ -1241,6 +1394,8 @@ function injectEl(el){
     }catch(e){}
 
     toast("✅ "+el.name+" added! Check the "+obj.category+" category.");
+    // Update live editor list if open
+    if(typeof LED!=="undefined")LED.updateItemList();
     setStat("injected: "+el.name);
     var injBtn=q("#pl-inj");
     if(injBtn){injBtn.textContent="✅ Injected!";injBtn.classList.add("done");setTimeout(function(){injBtn.textContent="➕ Add to Sandboxels";injBtn.classList.remove("done");},3000);}
@@ -1356,6 +1511,311 @@ function updatePreview(force){
     });
   }
 }
+
+// ── LIVE ELEMENT EDITOR ──────────────────────────────────────
+var LED = (function(){
+  var currentName=null, ledHistory=[], autoApply=false;
+  var paintColor="#00ffcc", brushSize=2, painting=false;
+  var ledCtx=null;
+
+  function qled(id){return document.getElementById(id);}
+
+  // Slider auto-label wiring
+  function wireSlider(id){
+    var inp=qled(id),val=qled(id+"-v");
+    if(!inp||!val)return;
+    inp.addEventListener("input",function(){val.textContent=parseFloat(inp.value).toFixed(inp.step<0.1?2:inp.step<1?1:0);if(autoApply)apply();});
+  }
+  ["led-opacity","led-glow","led-gravity","led-friction","led-viscosity","led-spreadRate","led-stickiness","led-heatConduct","led-flammable","led-selfHeat","led-radioactive","led-corrosive"].forEach(wireSlider);
+
+  // Color inputs trigger preview
+  ["led-color","led-color2","led-color3","led-glowColor"].forEach(function(id){
+    var el=qled(id);if(!el)return;
+    el.addEventListener("input",function(){renderPreview();if(autoApply)apply();});
+  });
+
+  // Non-slider inputs
+  ["led-behavior","led-state","led-density","led-temp","led-lifetime","led-tempHigh","led-stateHigh","led-tempLow","led-stateLow","led-explosion","led-desc"].forEach(function(id){
+    var el=qled(id);if(!el)return;
+    el.addEventListener("input",function(){if(autoApply)apply();});
+  });
+
+  // Auto-apply toggle — reads from settings
+  function checkAutoApply(){
+    autoApply=S.liveInject||false;
+    var aa=qled("pl-led-aa");if(aa)aa.checked=autoApply;
+  }
+  var aa=qled("pl-led-aa");
+  if(aa)aa.addEventListener("change",function(){autoApply=aa.checked;S.liveInject=aa.checked;saveSett();});
+
+  // Pixel canvas paint
+  function initCanvas(){
+    var cv=qled("pl-led-pvc");if(!cv)return;
+    ledCtx=cv.getContext("2d");
+    renderPreview();
+    cv.addEventListener("mousedown",function(e){painting=true;paint(e,cv);});
+    cv.addEventListener("mousemove",function(e){if(painting)paint(e,cv);});
+    cv.addEventListener("mouseup",function(){painting=false;});
+    cv.addEventListener("mouseleave",function(){painting=false;});
+  }
+
+  function paint(e,cv){
+    var r=cv.getBoundingClientRect();
+    var x=Math.floor((e.clientX-r.left)/r.width*cv.width);
+    var y=Math.floor((e.clientY-r.top)/r.height*cv.height);
+    var bs=parseInt(qled("pl-led-brushsize").value)||2;
+    if(!ledCtx)return;
+    ledCtx.fillStyle=qled("pl-led-colorpick").value||"#00ffcc";
+    ledCtx.fillRect(x-bs,y-bs,bs*2,bs*2);
+    // Update the main color to match what's being painted
+    var col=qled("led-color");
+    if(col)col.value=qled("pl-led-colorpick").value;
+  }
+
+  var _pvF=null;
+  function renderPreview(){
+    var cv=qled("pl-led-pvc");if(!cv||!ledCtx)return;
+    cancelAnimationFrame(_pvF);
+    var c1=qled("led-color")&&qled("led-color").value||"#7b1fa2";
+    var c2=qled("led-color2")&&qled("led-color2").value||c1;
+    var c3=qled("led-color3")&&qled("led-color3").value||c1;
+    var op=parseFloat(qled("led-opacity")&&qled("led-opacity").value||1);
+    var glow=parseFloat(qled("led-glow")&&qled("led-glow").value||0);
+    var gc=qled("led-glowColor")&&qled("led-glowColor").value||"#00e5ff";
+    ledCtx.clearRect(0,0,120,120);
+    function h2r(h){try{return[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];}catch{return[120,120,120];}}
+    function lerp(a,b,t){return Math.round(a+(b-a)*t);}
+    var r1=h2r(c1),r2=h2r(c2),r3=h2r(c3);
+    var px=4,cols=Math.floor(120/px),rows=Math.floor(120/px);
+    for(var row=0;row<rows;row++)for(var col=0;col<cols;col++){
+      if(Math.random()>.82)continue;
+      var t=Math.random();
+      var ca=t<.5?r1:r2,cb=t<.5?r2:r3;
+      var rgb=[lerp(ca[0],cb[0],t*2%1),lerp(ca[1],cb[1],t*2%1),lerp(ca[2],cb[2],t*2%1)];
+      ledCtx.fillStyle="rgba("+rgb[0]+","+rgb[1]+","+rgb[2]+","+op+")";
+      ledCtx.fillRect(col*px,row*px,px,px);
+    }
+    if(glow>0){ledCtx.save();ledCtx.globalAlpha=Math.min(glow*.25,.5);ledCtx.shadowColor=gc;ledCtx.shadowBlur=22*glow;ledCtx.fillStyle=gc;ledCtx.fillRect(0,0,120,120);ledCtx.restore();}
+    _pvF=requestAnimationFrame(renderPreview);
+  }
+
+  // Load element properties into form
+  function loadEl(name){
+    if(!name||!elements||!elements[name])return;
+    currentName=name;
+    var el=elements[name];
+    function sv(id,val){var e=qled(id);if(e&&val!==undefined&&val!==null)e.value=val;}
+    function svl(id,val){sv(id,val);var v=qled(id+"-v");if(v)v.textContent=val;}
+    sv("led-color",el.color||"#7b1fa2");
+    sv("led-color2",el.color2||el.color||"#7b1fa2");
+    sv("led-color3",el.color3||el.color||"#7b1fa2");
+    svl("led-opacity",el.opacity!==undefined?el.opacity:1);
+    svl("led-glow",el.glow||0);
+    sv("led-glowColor",el.glowColor||"#00e5ff");
+    // Find behavior name from behaviors object
+    var behName="POWDER";
+    if(el.behavior&&typeof behaviors!=="undefined"){
+      Object.keys(behaviors).forEach(function(k){if(behaviors[k]===el.behavior)behName=k;});
+    }
+    sv("led-behavior",behName);
+    sv("led-state",el.state||"solid");
+    sv("led-density",el.density||1000);
+    svl("led-gravity",el.gravity!==undefined?el.gravity:1);
+    svl("led-friction",el.friction!==undefined?el.friction:0.5);
+    svl("led-viscosity",el.viscosity!==undefined?el.viscosity:0.5);
+    svl("led-spreadRate",el.spreadRate||1);
+    svl("led-stickiness",el.stickiness||0);
+    sv("led-lifetime",el.lifetime||0);
+    sv("led-temp",el.temp||25);
+    svl("led-heatConduct",el.heatConduct!==undefined?el.heatConduct:0.5);
+    svl("led-flammable",el.flammable||0);
+    svl("led-selfHeat",el.selfHeat||0);
+    sv("led-tempHigh",el.tempHigh||"");
+    sv("led-stateHigh",el.stateHigh||"");
+    sv("led-tempLow",el.tempLow||"");
+    sv("led-stateLow",el.stateLow||"");
+    svl("led-radioactive",el.radioactive||0);
+    svl("led-corrosive",el.corrosive||0);
+    sv("led-explosion",el.explosion||"");
+    sv("led-desc",el.desc||"");
+    renderReactions(el.reactions||{});
+    renderPreview();
+    var title=qled("pl-led-title");if(title)title.textContent="🎨 Live Editor — "+name;
+    updateItemList();
+    // Highlight selected
+    document.querySelectorAll(".pl-led-item").forEach(function(i){i.classList.toggle("sel",i.dataset.name===name);});
+  }
+
+  function renderReactions(rxns){
+    var box=qled("pl-led-rxns");if(!box)return;box.innerHTML="";
+    Object.entries(rxns||{}).forEach(function(kv){
+      var touching=kv[0],props=kv[1];
+      var row=document.createElement("div");row.className="pl-led-rxn";
+      row.innerHTML='<span style="opacity:.5;font-size:9px">If touching</span>'+
+        '<input value="'+touching+'" placeholder="element" data-rxn-k/>'+
+        '<span style="opacity:.5;font-size:9px">→</span>'+
+        '<input value="'+(props.elem1||"")+'" placeholder="becomes" data-rxn-v/>'+
+        '<input type="number" value="'+(props.chance||100)+'" placeholder="%" style="width:38px;" data-rxn-c/>'+
+        '<button class="pl-led-rxndel">✕</button>';
+      row.querySelector(".pl-led-rxndel").addEventListener("click",function(){row.remove();});
+      box.appendChild(row);
+    });
+  }
+
+  function getReactions(){
+    var rxns={};
+    document.querySelectorAll("#pl-led-rxns .pl-led-rxn").forEach(function(row){
+      var k=row.querySelector("[data-rxn-k]"),v=row.querySelector("[data-rxn-v]"),ch=row.querySelector("[data-rxn-c]");
+      if(k&&v&&k.value&&v.value)rxns[k.value]={elem1:v.value,chance:parseInt(ch&&ch.value||100)};
+    });
+    return rxns;
+  }
+
+  function buildObj(){
+    function gv(id){var e=qled(id);return e?e.value:null;}
+    function gn(id,def){return parseFloat(gv(id))||def||0;}
+    var behStr=gv("led-behavior")||"POWDER";
+    var beh=typeof behaviors!=="undefined"?(behaviors[behStr]||behaviors.POWDER):null;
+    var obj={
+      color:gv("led-color")||"#7b1fa2",
+      color2:gv("led-color2")||undefined,
+      color3:gv("led-color3")||undefined,
+      behavior:beh,
+      category:(elements[currentName]&&elements[currentName].category)||"special",
+      state:gv("led-state")||"solid",
+      density:gn("led-density",1000),
+      gravity:gn("led-gravity",1),
+      friction:gn("led-friction",0.5),
+      viscosity:gn("led-viscosity",0.5),
+      spreadRate:gn("led-spreadRate",1),
+      stickiness:gn("led-stickiness",0),
+      opacity:gn("led-opacity",1),
+      glow:gn("led-glow",0),
+      glowColor:gv("led-glowColor")||"#00e5ff",
+      temp:gn("led-temp",25),
+      heatConduct:gn("led-heatConduct",0.5),
+      flammable:gn("led-flammable",0),
+      selfHeat:gn("led-selfHeat",0),
+      radioactive:gn("led-radioactive",0),
+      corrosive:gn("led-corrosive",0),
+      reactions:getReactions(),
+    };
+    var th=gv("led-tempHigh"),ts=gv("led-stateHigh");
+    if(th)obj.tempHigh=parseFloat(th);if(ts)obj.stateHigh=ts;
+    var tl=gv("led-tempLow"),tls=gv("led-stateLow");
+    if(tl)obj.tempLow=parseFloat(tl);if(tls)obj.stateLow=tls;
+    var lt=gv("led-lifetime");if(lt)obj.lifetime=parseInt(lt);
+    var ex=gv("led-explosion");if(ex)obj.explosion=parseFloat(ex);
+    var ds=gv("led-desc");if(ds)obj.desc=ds;
+    // Preserve tick function
+    if(currentName&&elements&&elements[currentName]&&elements[currentName].tick)obj.tick=elements[currentName].tick;
+    return obj;
+  }
+
+  function apply(){
+    if(!currentName){toast("Select an element first");return;}
+    ledHistory.push(JSON.stringify(elements[currentName]||{}));
+    if(ledHistory.length>20)ledHistory.shift();
+    var obj=buildObj();
+    try{
+      if(typeof addElement==="function") addElement(currentName,obj);
+      else if(typeof elements!=="undefined") elements[currentName]=obj;
+    }catch(e){ if(typeof elements!=="undefined") elements[currentName]=obj; }
+    try{if(typeof rebuildMenu==="function")rebuildMenu();}catch{}
+    toast("✅ "+currentName+" updated!");
+    updateItemList();
+  }
+
+  function updateItemList(){
+    var box=qled("pl-led-items");if(!box)return;box.innerHTML="";
+    var names=Object.keys(injected||{});
+    if(!names.length){box.innerHTML='<div style="font-size:10px;color:var(--dim);padding:6px">Inject elements first</div>';return;}
+    names.forEach(function(name){
+      var el=typeof elements!=="undefined"&&elements[name];
+      var color=el?el.color:"#888";
+      var item=document.createElement("div");item.className="pl-led-item"+(name===currentName?" sel":"");item.dataset.name=name;
+      item.innerHTML='<div class="pl-led-swatch" style="background:'+color+'"></div>'+name.replace(/_/g," ");
+      item.addEventListener("click",function(){loadEl(name);});
+      box.appendChild(item);
+    });
+  }
+
+  function open(){
+    checkAutoApply();
+    updateItemList();
+    // Auto-select first element
+    var names=Object.keys(injected||{});
+    if(!currentName&&names.length)loadEl(names[0]);
+    else if(currentName)loadEl(currentName);
+    var ed=qled("pl-live-editor");if(ed)ed.classList.add("on");
+    initCanvas();
+  }
+
+  function close(){
+    cancelAnimationFrame(_pvF);
+    var ed=qled("pl-live-editor");if(ed)ed.classList.remove("on");
+  }
+
+  // Wire buttons
+  var closeBtn=qled("pl-led-close");if(closeBtn)closeBtn.addEventListener("click",close);
+  var applyBtn=qled("pl-led-apply");if(applyBtn)applyBtn.addEventListener("click",apply);
+
+  var undoBtn=qled("pl-led-undo");if(undoBtn)undoBtn.addEventListener("click",function(){
+    if(!ledHistory.length){toast("Nothing to undo");return;}
+    try{
+      var prev=JSON.parse(ledHistory.pop());
+      if(typeof elements!=="undefined"&&currentName)elements[currentName]=prev;
+      loadEl(currentName);toast("Undone!");
+    }catch(e){toast("Undo failed");}
+  });
+
+  var copyBtn=qled("pl-led-copy");if(copyBtn)copyBtn.addEventListener("click",function(){
+    if(!currentName){toast("Select an element first");return;}
+    var newName=prompt("New element name:",currentName+"_copy");
+    if(!newName||!newName.trim())return;
+    newName=newName.trim().replace(/\s+/g,"_");
+    var obj=buildObj();
+    try{
+      if(typeof addElement==="function") addElement(newName,obj);
+      else if(typeof elements!=="undefined") elements[newName]=obj;
+      injected[newName]=true;
+    }catch(e){}
+    try{if(typeof rebuildMenu==="function")rebuildMenu();}catch{}
+    toast("Copied as: "+newName);currentName=newName;updateItemList();
+  });
+
+  var addRxn=qled("pl-led-addrxn");if(addRxn)addRxn.addEventListener("click",function(){
+    var box=qled("pl-led-rxns");if(!box)return;
+    var row=document.createElement("div");row.className="pl-led-rxn";
+    row.innerHTML='<span style="opacity:.5;font-size:9px">If touching</span>'+
+      '<input value="" placeholder="element" data-rxn-k/>'+
+      '<span style="opacity:.5;font-size:9px">→</span>'+
+      '<input value="" placeholder="becomes" data-rxn-v/>'+
+      '<input type="number" value="100" placeholder="%" style="width:38px;" data-rxn-c/>'+
+      '<button class="pl-led-rxndel">✕</button>';
+    row.querySelector(".pl-led-rxndel").addEventListener("click",function(){row.remove();});
+    box.appendChild(row);
+  });
+
+  var clrCv=qled("pl-led-clrcanvas");if(clrCv)clrCv.addEventListener("click",function(){
+    var cv=qled("pl-led-pvc");if(!cv||!ledCtx)return;
+    ledCtx.clearRect(0,0,cv.width,cv.height);renderPreview();
+  });
+
+  // Close on backdrop click
+  var ed=qled("pl-live-editor");
+  if(ed)ed.addEventListener("click",function(e){if(e.target===ed)close();});
+
+  return{open:open,close:close,loadEl:loadEl,updateItemList:updateItemList};
+})();
+
+function openLiveEditor(){LED.open();}
+
+// Also open editor when right-clicking injected button in sidebar
+document.addEventListener("contextmenu",function(e){
+  var btn=e.target.closest("[data-pl-el]");
+  if(btn){e.preventDefault();LED.loadEl(btn.getAttribute("data-pl-el"));LED.open();}
+});
 
 // ── VCE ───────────────────────────────────────────────────────
 var vceScripts=[],vceVars=[];
@@ -1549,9 +2009,7 @@ function applyVCE(){
 
 // VCE open/close
 q("#pl-pvc").addEventListener("click",function(){
-  var pv=q("#pl-pv"),vce=q("#pl-vce");
-  if(pv)pv.style.display="none";if(vce)vce.classList.add("on");
-  buildVCEPalette();renderVCEScript();renderVCEVars();
+  openLiveEditor();
 });
 q("#pl-vceback").addEventListener("click",function(){
   var pv=q("#pl-pv"),vce=q("#pl-vce");
@@ -1709,9 +2167,11 @@ function switchTab(name){
   var at=document.querySelector(".pl-tab[data-t='"+name+"']");if(at)at.classList.add("on");
   q("#pl-body").style.display=name==="editor"?"flex":"none";
   var ml=q("#pl-modloader");if(ml)ml.classList.toggle("on",name==="mods");
-  var pages=["lib","hist","keys","tut","sett","log"];
-  pages.forEach(function(p){var el=document.getElementById("pl-"+p+"tab");if(el)el.classList.toggle("on",name===p);});
+  var pages=["lib","hist","keys","tut","sett","log","tmpl","share","mini"];
+  pages.forEach(function(p){var el=document.getElementById("pl-"+p+"tab");if(!el)return;if(p==="mini"){el.style.display=name==="mini"?"flex":"none";}else{el.classList.toggle("on",name===p);}});
   if(name==="lib")refreshLib();
+  if(name==="tmpl")renderTemplates();
+  if(name==="mini"&&window._miniResize)setTimeout(window._miniResize,50);
   if(name==="hist")renderHist();
   if(name==="editor"&&S.animatedPreview)updatePreview();else cancelAnimationFrame(pvF);
 }
@@ -1772,7 +2232,205 @@ document.addEventListener("keydown",function(e){
 });
 
 // ── INIT ──────────────────────────────────────────────────────
-buildPalette();applySettUI();bindSettUI();loadSaved();
+buildPalette();applySettUI();bindSettUI();loadSaved();buildPalette();applySettUI();bindSettUI();loadSaved();
+
+// ── TEMPLATES ─────────────────────────────────────────────────
+var TEMPLATES=[
+  {name:"🔥 Fire",desc:"Burns upward, ignites things",color:"#ff4400",nodes:[
+    {type:"setColor",data:{color:"#ff4400"}},{type:"setColor2",data:{color2:"#ff8800"}},
+    {type:"setBehavior",data:{behavior:"FIRE"}},{type:"setState",data:{state:"gas"}},
+    {type:"setDensity",data:{density:0.5}},{type:"setTemp",data:{temp:500}},
+    {type:"setFlammable",data:{flammable:80}},{type:"setLifetime",data:{lifetime:60}},
+  ]},
+  {name:"💧 Liquid",desc:"Flows like water",color:"#3399ff",nodes:[
+    {type:"setColor",data:{color:"#3399ff"}},{type:"setColor2",data:{color2:"#66bbff"}},
+    {type:"setBehavior",data:{behavior:"LIQUID"}},{type:"setState",data:{state:"liquid"}},
+    {type:"setDensity",data:{density:1000}},{type:"setViscosity",data:{viscosity:0.5}},
+  ]},
+  {name:"🪨 Solid",desc:"Heavy, doesn't move",color:"#888888",nodes:[
+    {type:"setColor",data:{color:"#888888"}},{type:"setColor2",data:{color2:"#666666"}},
+    {type:"setBehavior",data:{behavior:"WALL"}},{type:"setState",data:{state:"solid"}},
+    {type:"setDensity",data:{density:3000}},{type:"setHardness",data:{hardness:0.9}},
+    {type:"setIndestructible",data:{indestructible:false}},
+  ]},
+  {name:"💨 Gas",desc:"Rises and spreads",color:"#aaaacc",nodes:[
+    {type:"setColor",data:{color:"#aaaacc"}},{type:"setOpacity",data:{opacity:0.6}},
+    {type:"setBehavior",data:{behavior:"GAS"}},{type:"setState",data:{state:"gas"}},
+    {type:"setDensity",data:{density:0.3}},{type:"setLifetime",data:{lifetime:200}},
+  ]},
+  {name:"✨ Glow",desc:"Glowing powder",color:"#00ffcc",nodes:[
+    {type:"setColor",data:{color:"#00ffcc"}},{type:"setColor2",data:{color2:"#0088aa"}},
+    {type:"setBehavior",data:{behavior:"POWDER"}},{type:"setState",data:{state:"powder"}},
+    {type:"setDensity",data:{density:1200}},{type:"setGlow",data:{glow:0.8}},
+    {type:"setGlowColor",data:{glowColor:"#00ffcc"}},
+  ]},
+  {name:"💥 Explosive",desc:"Blows up on contact",color:"#ff6600",nodes:[
+    {type:"setColor",data:{color:"#ff6600"}},{type:"setColor2",data:{color2:"#ffaa00"}},
+    {type:"setBehavior",data:{behavior:"POWDER"}},{type:"setState",data:{state:"powder"}},
+    {type:"setDensity",data:{density:1500}},{type:"addExplosion",data:{explosion:5}},
+    {type:"setFlammable",data:{flammable:95}},
+  ]},
+  {name:"🧪 Acid",desc:"Corrodes everything",color:"#aaff00",nodes:[
+    {type:"setColor",data:{color:"#aaff00"}},{type:"setBehavior",data:{behavior:"LIQUID"}},
+    {type:"setState",data:{state:"liquid"}},{type:"setDensity",data:{density:1200}},
+    {type:"setCorrosive",data:{corrosive:0.9}},
+  ]},
+  {name:"❄️ Ice",desc:"Freezes into solid, melts when hot",color:"#aaddff",nodes:[
+    {type:"setColor",data:{color:"#aaddff"}},{type:"setColor2",data:{color2:"#ffffff"}},
+    {type:"setBehavior",data:{behavior:"POWDER"}},{type:"setState",data:{state:"solid"}},
+    {type:"setDensity",data:{density:900}},{type:"setTemp",data:{temp:-10}},
+    {type:"setTempHigh",data:{tempHigh:5,tempHighElem:"water"}},
+  ]},
+  {name:"☢️ Radioactive",desc:"Spreads and mutates",color:"#88ff00",nodes:[
+    {type:"setColor",data:{color:"#88ff00"}},{type:"setColor2",data:{color2:"#446600"}},
+    {type:"setBehavior",data:{behavior:"POWDER"}},{type:"setState",data:{state:"powder"}},
+    {type:"setDensity",data:{density:1800}},{type:"setRadioactive",data:{radioactive:20}},
+    {type:"setGlow",data:{glow:0.4}},{type:"setGlowColor",data:{glowColor:"#88ff00"}},
+  ]},
+  {name:"🌊 Heavy Liquid",desc:"Denser than water, sinks",color:"#1155aa",nodes:[
+    {type:"setColor",data:{color:"#1155aa"}},{type:"setBehavior",data:{behavior:"LIQUID"}},
+    {type:"setState",data:{state:"liquid"}},{type:"setDensity",data:{density:2000}},
+    {type:"setViscosity",data:{viscosity:0.8}},{type:"setSpreadRate",data:{spreadRate:1}},
+  ]},
+];
+
+function renderTemplates(){
+  var grid=q("#pl-tmpl-grid");if(!grid)return;grid.innerHTML="";
+  TEMPLATES.forEach(function(tmpl){
+    var card=document.createElement("div");
+    card.style.cssText="background:"+T().node+";border:1px solid "+T().border+";border-radius:7px;padding:10px;cursor:pointer;transition:border-color .1s;";
+    card.innerHTML='<div style="width:100%;height:6px;border-radius:3px;background:'+tmpl.color+';margin-bottom:8px;"></div>'+
+      '<div style="font-size:12px;font-weight:800;color:'+T().text+'">'+tmpl.name+'</div>'+
+      '<div style="font-size:10px;color:'+T().dim+';margin-top:3px">'+tmpl.desc+'</div>'+
+      '<div style="font-size:9px;font-weight:700;color:'+T().acc+';margin-top:6px">'+tmpl.nodes.length+' blocks →</div>';
+    card.addEventListener("mouseenter",function(){card.style.borderColor=T().acc;});
+    card.addEventListener("mouseleave",function(){card.style.borderColor=T().border;});
+    card.addEventListener("click",function(){
+      if(!confirm("Load template: "+tmpl.name+"? This will clear your current blocks."))return;
+      pushSnap("Load template");
+      Object.keys(nReg).forEach(function(id){try{nReg[id].el.remove();}catch{}delete nReg[id];});
+      var spacing=170,startX=55,startY=45;
+      tmpl.nodes.forEach(function(n,i){
+        addNode(n.type,startX,startY+(i*spacing),n.data);
+      });
+      drawConns();updatePreview();autoSave();
+      switchTab("editor");
+      toast("Template loaded: "+tmpl.name);
+    });
+    grid.appendChild(card);
+  });
+}
+
+// ── SHARE ─────────────────────────────────────────────────────
+q("#pl-share-gen").addEventListener("click",function(){
+  var el=buildEl();
+  var js=generateJS(el);
+  var shareCode="// Pixel Lab element by Omelette — paste in console to use\n"+
+    "// Element: "+el.name+"\n"+
+    "(function(){\n"+
+    "  var props="+JSON.stringify({
+      color:el.color,color2:el.color2,color3:el.color3,
+      behavior:el.behavior,category:el.category,state:el.state,
+      density:el.density,glow:el.glow,glowColor:el.glowColor,
+      opacity:el.opacity,temp:el.temp,flammable:el.flammable,
+      radioactive:el.radioactive,corrosive:el.corrosive,
+      explosion:el.explosion,desc:el.desc,
+      reactions:el.reactions,
+    },null,2)+"\n"+
+    "  if(typeof addElement==='function') addElement('"+el.name+"',Object.assign(props,{behavior:behaviors[props.behavior]||behaviors.POWDER}));\n"+
+    "  else elements['"+el.name+"']=Object.assign(props,{behavior:behaviors[props.behavior]||behaviors.POWDER});\n"+
+    "  if(typeof rebuildMenu==='function') rebuildMenu();\n"+
+    "  console.log('Element added: "+el.name+"');\n"+
+    "})();";
+  q("#pl-share-out").value=shareCode;
+  toast("Share code generated!");
+});
+
+q("#pl-share-copy").addEventListener("click",function(){
+  var ta=q("#pl-share-out");if(!ta||!ta.value){toast("Generate code first!");return;}
+  navigator.clipboard.writeText(ta.value).then(function(){toast("📋 Copied to clipboard!");}).catch(function(){ta.select();document.execCommand("copy");toast("Copied!");});
+});
+
+q("#pl-share-imp").addEventListener("click",function(){
+  var code=q("#pl-share-inp").value.trim();
+  if(!code){toast("Paste a share code first!");return;}
+  try{
+    eval(code);
+    toast("✅ Element imported!");
+    if(typeof rebuildMenu==="function")rebuildMenu();
+  }catch(e){toast("❌ Import failed: "+e.message);}
+});
+
+// ── MINI TEST CANVAS ──────────────────────────────────────────
+var miniEl=null,miniDrawing=false;
+(function(){
+  var mc=q("#pl-mini-canvas");if(!mc)return;
+  var SCALE=6,W=Math.floor(480/SCALE),H=Math.floor(400/SCALE);
+  var grid=[];
+  for(var i=0;i<W*H;i++)grid.push(null);
+  var ctx=mc.getContext("2d");
+
+  function resize(){
+    var tab=q("#pl-minitab");if(!tab)return;
+    mc.width=tab.offsetWidth||480;
+    mc.height=Math.max(tab.offsetHeight-56,300)||300;
+    draw();
+  }
+
+  function draw(){
+    ctx.fillStyle="#111";ctx.fillRect(0,0,mc.width,mc.height);
+    var gw=Math.floor(mc.width/SCALE),gh=Math.floor(mc.height/SCALE);
+    for(var y=0;y<gh;y++)for(var x2=0;x2<gw;x2++){
+      var cell=grid[y*W+x2];
+      if(!cell)continue;
+      ctx.fillStyle=cell;
+      ctx.fillRect(x2*SCALE,y*SCALE,SCALE-1,SCALE-1);
+    }
+  }
+
+  function getPos(e){
+    var r=mc.getBoundingClientRect();
+    return{x:Math.floor((e.clientX-r.left)/SCALE),y:Math.floor((e.clientY-r.top)/SCALE)};
+  }
+
+  function paint(e){
+    var p=getPos(e);
+    var gw=Math.floor(mc.width/SCALE);
+    if(p.x<0||p.y<0||p.x>=gw)return;
+    var tool=q("#pl-mini-tool").value;
+    var color=null;
+    if(tool==="draw")color=miniEl?miniEl.color:"#00ffcc";
+    else if(tool==="sand")color="#e8c060";
+    else if(tool==="water")color="#3399ff";
+    else if(tool==="fire")color="#ff4400";
+    // paint a 2x2 brush
+    for(var dy=0;dy<2;dy++)for(var dx=0;dx<2;dx++){
+      var idx=(p.y+dy)*W+(p.x+dx);
+      if(idx>=0&&idx<grid.length)grid[idx]=tool==="erase"?null:color;
+    }
+    draw();
+  }
+
+  mc.addEventListener("mousedown",function(e){miniDrawing=true;paint(e);});
+  mc.addEventListener("mousemove",function(e){if(miniDrawing)paint(e);});
+  mc.addEventListener("mouseup",function(){miniDrawing=false;});
+  mc.addEventListener("mouseleave",function(){miniDrawing=false;});
+
+  q("#pl-mini-clr").addEventListener("click",function(){
+    for(var i=0;i<grid.length;i++)grid[i]=null;draw();
+  });
+
+  q("#pl-mini-inj").addEventListener("click",function(){
+    var el=buildEl();injectEl(el);miniEl=el;
+    var stat=q("#pl-mini-status");
+    if(stat)stat.textContent="Drawing: "+el.name+" — select it in the game sidebar to place!";
+    toast("Injected "+el.name+" — find it in Special category!");
+  });
+
+  // resize when tab opens
+  var _origSwitch=switchTab;
+  window._miniResize=resize;
+})();
 if(!Object.keys(nReg).length){
   addNode("setColor",55,45);addNode("setBehavior",55,170);addNode("setDensity",55,295);
 }
